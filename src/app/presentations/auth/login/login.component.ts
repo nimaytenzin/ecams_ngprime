@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/core/dataservice/User/auth.service';
-import { ZHIDHAYCONTACTDETAILS } from 'src/app/core/constants/constants';
 import { USERROLESENUM } from 'src/app/core/constants/enums';
 import * as CryptoJS from 'crypto-js';
 import { AuthenticatedUserDTO } from 'src/app/core/dataservice/User/dto/auth.dto';

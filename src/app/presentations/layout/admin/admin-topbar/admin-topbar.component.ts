@@ -1,11 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { AdminLayoutService } from '../service/admin-layout.service';
-import {
-    API_URL,
-    ASSET_URL,
-    ZHIDHAYCONTACTDETAILS,
-} from 'src/app/core/constants/constants';
+import { API_URL, ASSET_URL } from 'src/app/core/constants/constants';
 import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CommonModule } from '@angular/common';
@@ -52,7 +48,6 @@ import { StaffUpdateProfileComponent } from 'src/app/presentations/staff/users/s
 })
 export class AdminTopbarComponent {
     items!: MenuItem[];
-    companyDetails = ZHIDHAYCONTACTDETAILS;
     @ViewChild('menubutton') menuButton!: ElementRef;
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
     @ViewChild('topbarmenu') menu!: ElementRef;
