@@ -1,0 +1,289 @@
+<p-toast />
+
+<div class="p-4">
+    <form
+        [formGroup]="createUserForm"
+        (ngSubmit)="createUser()"
+        class="p-fluid flex flex-column gap-4"
+    >
+        <div class="grid">
+            <!-- Name -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="name">Full Name *</label>
+                    <input
+                        pInputText
+                        id="name"
+                        formControlName="name"
+                        type="text"
+                        placeholder="Enter full name"
+                        [class.ng-invalid]="isFieldInvalid('name')"
+                    />
+                    <small *ngIf="isFieldInvalid('name')" class="p-error">
+                        {{ getFieldErrorMessage("name") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="email">Email Address *</label>
+                    <input
+                        pInputText
+                        id="email"
+                        formControlName="email"
+                        type="email"
+                        placeholder="Enter email address"
+                        [class.ng-invalid]="isFieldInvalid('email')"
+                    />
+                    <small *ngIf="isFieldInvalid('email')" class="p-error">
+                        {{ getFieldErrorMessage("email") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="contact">Phone Number *</label>
+                    <p-inputGroup>
+                        <p-inputGroupAddon>+975</p-inputGroupAddon>
+                        <p-inputNumber
+                            formControlName="contact"
+                            mode="decimal"
+                            inputId="contact"
+                            [useGrouping]="false"
+                            placeholder="17123456"
+                            [class.ng-invalid]="isFieldInvalid('contact')"
+                        />
+                    </p-inputGroup>
+                    <small *ngIf="isFieldInvalid('contact')" class="p-error">
+                        {{ getFieldErrorMessage("contact") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- CID -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="cid">CID *</label>
+                    <input
+                        pInputText
+                        id="cid"
+                        formControlName="cid"
+                        type="text"
+                        placeholder="Enter CID"
+                        [class.ng-invalid]="isFieldInvalid('cid')"
+                    />
+                    <small *ngIf="isFieldInvalid('cid')" class="p-error">
+                        {{ getFieldErrorMessage("cid") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Employee ID -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="employeeId">Employee ID *</label>
+                    <input
+                        pInputText
+                        id="employeeId"
+                        formControlName="employeeId"
+                        type="text"
+                        placeholder="Enter employee ID"
+                        [class.ng-invalid]="isFieldInvalid('employeeId')"
+                    />
+                    <small *ngIf="isFieldInvalid('employeeId')" class="p-error">
+                        {{ getFieldErrorMessage("employeeId") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Staff Status -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="staffStatus">Staff Status *</label>
+                    <p-dropdown
+                        [options]="staffStatuses"
+                        formControlName="staffStatus"
+                        placeholder="Select Status"
+                        appendTo="body"
+                        [class.ng-invalid]="isFieldInvalid('staffStatus')"
+                    ></p-dropdown>
+                    <small
+                        *ngIf="isFieldInvalid('staffStatus')"
+                        class="p-error"
+                    >
+                        {{ getFieldErrorMessage("staffStatus") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Department -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="departmentId">Department *</label>
+                    <p-dropdown
+                        [options]="departments"
+                        optionLabel="name"
+                        optionValue="id"
+                        formControlName="departmentId"
+                        placeholder="Select Department"
+                        appendTo="body"
+                        (onChange)="onDepartmentChange()"
+                        [class.ng-invalid]="isFieldInvalid('departmentId')"
+                    ></p-dropdown>
+                    <small
+                        *ngIf="isFieldInvalid('departmentId')"
+                        class="p-error"
+                    >
+                        {{ getFieldErrorMessage("departmentId") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Division -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="divisionId">Division *</label>
+                    <p-dropdown
+                        [options]="divisions"
+                        optionLabel="name"
+                        optionValue="id"
+                        formControlName="divisionId"
+                        placeholder="Select Division"
+                        appendTo="body"
+                        [disabled]="!divisions?.length"
+                        [class.ng-invalid]="isFieldInvalid('divisionId')"
+                    ></p-dropdown>
+                    <small *ngIf="isFieldInvalid('divisionId')" class="p-error">
+                        {{ getFieldErrorMessage("divisionId") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Designation -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="designationId">Designation *</label>
+                    <p-dropdown
+                        [options]="designations"
+                        optionLabel="name"
+                        optionValue="id"
+                        formControlName="designationId"
+                        placeholder="Select Designation"
+                        appendTo="body"
+                        [class.ng-invalid]="isFieldInvalid('designationId')"
+                    ></p-dropdown>
+                    <small
+                        *ngIf="isFieldInvalid('designationId')"
+                        class="p-error"
+                    >
+                        {{ getFieldErrorMessage("designationId") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Position -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="positionId">Position Level *</label>
+                    <p-dropdown
+                        [options]="positions"
+                        optionLabel="name"
+                        optionValue="id"
+                        formControlName="positionId"
+                        placeholder="Select Position Level"
+                        appendTo="body"
+                        [class.ng-invalid]="isFieldInvalid('positionId')"
+                    ></p-dropdown>
+                    <small *ngIf="isFieldInvalid('positionId')" class="p-error">
+                        {{ getFieldErrorMessage("positionId") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="col-12">
+                <div class="flex flex-column gap-2">
+                    <label for="address">Present Address</label>
+                    <input
+                        pInputText
+                        id="address"
+                        formControlName="address"
+                        type="text"
+                        placeholder="Enter present address"
+                    />
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="password">Password *</label>
+                    <p-password
+                        id="password"
+                        formControlName="password"
+                        [toggleMask]="true"
+                        placeholder="Enter password"
+                        [class.ng-invalid]="isFieldInvalid('password')"
+                    ></p-password>
+                    <small *ngIf="isFieldInvalid('password')" class="p-error">
+                        {{ getFieldErrorMessage("password") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="col-12 md:col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="confirmPassword">Confirm Password *</label>
+                    <p-password
+                        id="confirmPassword"
+                        formControlName="confirmPassword"
+                        [toggleMask]="true"
+                        placeholder="Confirm password"
+                        [class.ng-invalid]="isFieldInvalid('confirmPassword')"
+                    ></p-password>
+                    <small
+                        *ngIf="isFieldInvalid('confirmPassword')"
+                        class="p-error"
+                    >
+                        {{ getFieldErrorMessage("confirmPassword") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="col-12">
+                <div class="flex flex-column gap-2">
+                    <label for="bio">Bio</label>
+                    <textarea
+                        pInputTextarea
+                        rows="4"
+                        formControlName="bio"
+                        placeholder="Enter bio or additional remarks..."
+                        inputId="bio"
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex justify-content-end gap-3 mt-4">
+            <p-button
+                label="Cancel"
+                severity="secondary"
+                (click)="cancel()"
+                type="button"
+            ></p-button>
+            <p-button
+                label="Create Staff"
+                type="submit"
+                [disabled]="createUserForm.invalid || isSubmitting"
+                [loading]="isSubmitting"
+            ></p-button>
+        </div>
+    </form>
+</div>

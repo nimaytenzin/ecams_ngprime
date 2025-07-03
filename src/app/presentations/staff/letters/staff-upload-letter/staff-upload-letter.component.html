@@ -1,0 +1,302 @@
+<div>
+    <p class="text-4xl font-bold">Upload</p>
+    <p-divider></p-divider>
+
+    <form [formGroup]="letterForm" (ngSubmit)="uploadLetter()">
+        <div class="grid w-full md:w-10/12">
+            <div class="col-12">
+                <!-- Basic Details -->
+                <div formGroupName="basicDetails" class="my-4">
+                    <div class="my-3">
+                        <p class="mb-2 font-semibold">Subject</p>
+                        <input
+                            pInputText
+                            formControlName="subject"
+                            placeholder="subject.."
+                            class="w-full"
+                        />
+                        <small
+                            *ngIf="letterForm.get('basicDetails.subject')?.touched && 
+                                              letterForm.get('basicDetails.subject')?.errors?.['required']"
+                            class="p-error"
+                            >Subject is required</small
+                        >
+                    </div>
+
+                    <div class="my-3">
+                        <p class="mb-2 font-semibold">LetterHead</p>
+                        <input
+                            pInputText
+                            formControlName="letterHead"
+                            placeholder="Letter Head"
+                            class="w-full"
+                        />
+                        <small
+                            *ngIf="letterForm.get('basicDetails.letterHead')?.touched && 
+                                              letterForm.get('basicDetails.letterHead')?.errors?.['required']"
+                            class="p-error"
+                            >LetterHead is required</small
+                        >
+                    </div>
+
+                    <p class="mb-2 font-semibold">Letter Direction</p>
+                    <div class="flex gap-6">
+                        <p-dropdown
+                            [options]="modes"
+                            formControlName="direction"
+                            optionLabel="label"
+                            optionValue="value"
+                        ></p-dropdown>
+                        <div class="text-xs">
+                            <p>In -> Incoming Letters to the department</p>
+                            <p>Out -> Outgoing letters from the department</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p-divider></p-divider>
+
+                <!-- Recipient/Sender Details -->
+                <div formGroupName="recipientDetails" class="my-4">
+                    <p
+                        class="text-left my-2 border-b font-semibold text-gray-800 leading-none w-full pb-2"
+                        *ngIf="isOutgoingLetter; else incomingTemp"
+                    >
+                        To | Recipient
+                    </p>
+                    <ng-template
+                        #incomingTemp
+                        class="text-left my-2 border-b font-semibold text-gray-800 leading-none w-full pb-2"
+                    >
+                        From | Sender
+                    </ng-template>
+
+                    <div class="flex flex-col gap-2 mt-2">
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Recipient</p>
+                            <div class="w-full rounded-lg">
+                                <input
+                                    pInputText
+                                    formControlName="outRecipient"
+                                    placeholder="Dasho Dzongdag/Director"
+                                />
+                                <p
+                                    *ngIf="letterForm.get('recipientDetails.outRecipient')?.touched && 
+                                                      letterForm.get('recipientDetails.outRecipient')?.errors?.['required']"
+                                    class="p-error text-xs"
+                                >
+                                    Recipient is required
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Office</p>
+                            <div class="w-full rounded-lg">
+                                <input
+                                    pInputText
+                                    formControlName="outOffice"
+                                    placeholder="Office Name"
+                                />
+                                <p
+                                    *ngIf="letterForm.get('recipientDetails.outOffice')?.touched && 
+                                                      letterForm.get('recipientDetails.outOffice')?.errors?.['required']"
+                                    class="p-error text-xs"
+                                >
+                                    Office is required
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Dzongkhag</p>
+                            <div class="w-full flex rounded-lg">
+                                <p-dropdown
+                                    [options]="dzongkhags"
+                                    formControlName="outDzongkhag"
+                                    optionLabel="name"
+                                ></p-dropdown>
+                                <p
+                                    *ngIf="letterForm.get('recipientDetails.outDzongkhag')?.touched && 
+                                                      letterForm.get('recipientDetails.outDzongkhag')?.errors?.['required']"
+                                    class="p-error text-xs"
+                                >
+                                    Dzongkhag is required
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Department</p>
+                            <div class="w-full rounded-lg">
+                                <input
+                                    pInputText
+                                    formControlName="outDepartment"
+                                    placeholder="Department Name"
+                                />
+                                <p
+                                    *ngIf="letterForm.get('recipientDetails.outDepartment')?.touched && 
+                                                      letterForm.get('recipientDetails.outDepartment')?.errors?.['required']"
+                                    class="p-error text-xs"
+                                >
+                                    Department is required
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Division</p>
+                            <div class="w-full rounded-lg">
+                                <input
+                                    pInputText
+                                    formControlName="outDivision"
+                                    placeholder="Division Name"
+                                />
+                                <small
+                                    *ngIf="letterForm.get('recipientDetails.outDivision')?.touched && 
+                                                      letterForm.get('recipientDetails.outDivision')?.errors?.['required']"
+                                    class="p-error"
+                                    >Division is required</small
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p-divider></p-divider>
+
+                <!-- Department Details -->
+                <div formGroupName="departmentDetails" class="my-4">
+                    <p
+                        class="text-left my-2 border-b font-semibold text-gray-800 leading-none w-full pb-2"
+                    >
+                        {{
+                            isOutgoingLetter
+                                ? "From | Sender"
+                                : "To | Recipient"
+                        }}
+                    </p>
+
+                    <div class="flex flex-col gap-2 mt-2">
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Department</p>
+                            <div class="w-full flex rounded-lg">
+                                <p-dropdown
+                                    [options]="departments"
+                                    formControlName="departmentId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    (onChange)="onDepartmentChange()"
+                                ></p-dropdown>
+                                <small
+                                    *ngIf="letterForm.get('departmentDetails.departmentId')?.touched && 
+                                                      letterForm.get('departmentDetails.departmentId')?.errors?.['required']"
+                                    class="p-error"
+                                    >Department is required</small
+                                >
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Division</p>
+                            <div class="w-full flex rounded-lg">
+                                <p-dropdown
+                                    [options]="divisions"
+                                    formControlName="divisionId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                ></p-dropdown>
+                                <small
+                                    *ngIf="letterForm.get('departmentDetails.divisionId')?.touched && 
+                                                      letterForm.get('departmentDetails.divisionId')?.errors?.['required']"
+                                    class="p-error"
+                                    >Division is required</small
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p-divider></p-divider>
+
+                <!-- Storage Details -->
+                <div formGroupName="storageDetails" class="my-4">
+                    <p class="mb-2 font-semibold">Storage</p>
+                    <div class="flex flex-col gap-2">
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Folder Category</p>
+                            <div class="w-full flex rounded-lg">
+                                <p-dropdown
+                                    [options]="fileLocationCategories"
+                                    formControlName="archivalFolderCategoryId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    (onChange)="onFolderCategoryChange()"
+                                ></p-dropdown>
+                                <small
+                                    *ngIf="letterForm.get('storageDetails.archivalFolderCategoryId')?.touched && 
+                                                      letterForm.get('storageDetails.archivalFolderCategoryId')?.errors?.['required']"
+                                    class="p-error"
+                                    >Folder Category is required</small
+                                >
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <p class="mb-2 font-semibold">Folder Category</p>
+                            <div class="w-full flex rounded-lg">
+                                <p-dropdown
+                                    [options]="fileLocations"
+                                    formControlName="archivalFolderId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                ></p-dropdown>
+                                <small
+                                    *ngIf="letterForm.get('storageDetails.archivalFolderId')?.touched && 
+                                                      letterForm.get('storageDetails.archivalFolderId')?.errors?.['required']"
+                                    class="p-error"
+                                    >Folder is required</small
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILE SELECTION -->
+                <div class="my-4">
+                    <p class="mb-2 font-semibold">Select Letter</p>
+                    <div class="flex flex-column gap-2">
+                        <div class="my-2">
+                            <p-fileUpload
+                                #fileUpload
+                                mode="basic"
+                                name="letterFile"
+                                (onSelect)="onLetterFileSelect($event)"
+                                accept=".pdf,.doc,.docx"
+                                chooseLabel="Select Letter"
+                            >
+                            </p-fileUpload>
+                        </div>
+                        <p
+                            class="p-error text-xs"
+                            *ngIf="
+                                letterForm.get('fileUpload')?.touched &&
+                                letterForm.get('fileUpload')?.invalid
+                            "
+                        >
+                            Letter file is required
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="mt-4">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Upload Letter"
+                        (click)="uploadLetter()"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

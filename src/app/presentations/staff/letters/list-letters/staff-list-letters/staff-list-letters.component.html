@@ -1,0 +1,23 @@
+<p class="text-4xl">All Letters</p>
+<p-divider></p-divider>
+<p-tabView>
+    <p-tabPanel header="All Letters">
+        <app-staff-list-paginated-letter
+            [title]="'All Letters'"
+            [getPaginatedLettersFn]="getAllLettersPaginated"
+        ></app-staff-list-paginated-letter>
+    </p-tabPanel>
+    <p-tabPanel header="Pending">
+        <app-staff-list-paginated-letter
+            [title]="'Pending Letters'"
+            [getPaginatedLettersFn]="getAllPendingLettersPaginated"
+        ></app-staff-list-paginated-letter>
+    </p-tabPanel>
+    <p-tabPanel header="Resolved">
+        <app-staff-list-paginated-letter
+            [title]="'Resolved Letters'"
+            [getPaginatedLettersFn]="getAllResolvedLettersPaginated"
+        ></app-staff-list-paginated-letter>
+    </p-tabPanel>
+    <p-tabPanel header="Circulars"> </p-tabPanel>
+</p-tabView>

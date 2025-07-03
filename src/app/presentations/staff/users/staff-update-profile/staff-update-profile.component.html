@@ -1,0 +1,265 @@
+<p-toast />
+
+<p-dialog
+    [(visible)]="showUploadDialog"
+    [modal]="true"
+    [closable]="true"
+    [showHeader]="true"
+    header="Upload Profile Picture"
+    (onHide)="closeUploadProfileModal()"
+>
+    <div class="p-fluid">
+        <p-fileUpload
+            #fileUpload
+            mode="basic"
+            name="profileImage"
+            accept="image/*"
+            [multiple]="false"
+            (onSelect)="onProfileImageChange($event)"
+            chooseLabel="Select Profile Picture"
+        >
+        </p-fileUpload>
+        <div class="flex justify-content-end mt-3">
+            <p-button
+                label="Upload"
+                (click)="uploadProfileImage()"
+                [disabled]="!selectedProfileImage"
+            ></p-button>
+            <p-button
+                label="Cancel"
+                (click)="closeUploadProfileModal()"
+                severity="secondary"
+                class="ml-2"
+            ></p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog
+    [(visible)]="showPasswordChangeModal"
+    [modal]="true"
+    [closable]="true"
+    [showHeader]="true"
+    header="Change Password"
+    (onHide)="closeUploadProfileModal()"
+>
+    <div class="p-fluid">
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <div class="field mb-4">
+                <label for="newPassword">New Password</label>
+                <p-password
+                    id="newPassword"
+                    formControlName="newPassword"
+                    [toggleMask]="true"
+                    placeholder="Enter new password"
+                    [feedback]="true"
+                ></p-password>
+                <small
+                    *ngIf="
+                        passwordForm.get('newPassword')?.invalid &&
+                        passwordForm.get('newPassword')?.touched
+                    "
+                    class="p-error"
+                >
+                    Password must be at least 8 characters
+                </small>
+            </div>
+
+            <div class="field mb-4">
+                <label for="confirmPassword">Confirm New Password</label>
+                <p-password
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    [toggleMask]="true"
+                    placeholder="Confirm new password"
+                    [feedback]="false"
+                ></p-password>
+                <small
+                    *ngIf="
+                        passwordForm.get('confirmPassword')?.invalid &&
+                        passwordForm.get('confirmPassword')?.touched
+                    "
+                    class="p-error"
+                >
+                    Passwords must match
+                </small>
+            </div>
+
+            <div class="flex justify-content-end mt-3">
+                <p-button
+                    label="Change Password"
+                    type="submit"
+                    [disabled]="passwordForm.invalid || passwordForm.pristine"
+                ></p-button>
+                <p-button
+                    label="Cancel"
+                    (click)="closePasswordChangeModal()"
+                    severity="secondary"
+                    class="ml-2"
+                ></p-button>
+            </div>
+        </form>
+    </div>
+</p-dialog>
+
+<div
+    class="flex w-full flex-column justify-content-center align-items-center"
+    *ngIf="staff"
+>
+    <div
+        class="flex justify-center"
+        [ngStyle]="getImgUrl(staff.profileUri)"
+        *ngIf="staff.profileUri; else noProfileStaff"
+    ></div>
+
+    <ng-template #noProfileStaff>
+        <div
+            class="bg-gray-100 flex align-items-center justify-content-center"
+            style="width: 10rem; height: 10rem; border-radius: 100%"
+        >
+            <span class="text-3xl font-bold">
+                {{ staff.name.charAt(0) }}
+            </span>
+        </div>
+    </ng-template>
+    <div class="flex gap-2 justify-content-start my-4">
+        <p-button
+            (click)="openUploadProfileModal()"
+            label="Change Profile"
+            severity="secondary"
+            size="small"
+        ></p-button>
+        <p-button
+            (click)="openChangePasswordModal()"
+            label="Change Password"
+            severity="danger"
+            size="small"
+        ></p-button>
+    </div>
+    <form
+        [formGroup]="updateUserForm"
+        class="p-fluid p-2 flex w-full flex-column gap-5 p-fluid"
+    >
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="position">Status</label>
+            <p-dropdown
+                [options]="staffStatuses"
+                formControlName="staffStatus"
+                placeholder="Select Status"
+                appendTo="body"
+            ></p-dropdown>
+        </div>
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="name">Name*</label>
+            <input pInputText id="name" formControlName="name" type="text" />
+        </div>
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="cid">Email*</label>
+            <input pInputText id="email" formControlName="email" type="text" />
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="contact">Phone Number*</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>+975</p-inputGroupAddon>
+                <p-inputNumber
+                    formControlName="contact"
+                    mode="decimal"
+                    inputId="withoutgrouping"
+                    [useGrouping]="false"
+                />
+            </p-inputGroup>
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="position">Position Level</label>
+            <p-dropdown
+                [options]="positions"
+                formControlName="positionId"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select Position Level"
+                appendTo="body"
+            ></p-dropdown>
+        </div>
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="departmentId">Designation</label>
+            <p-dropdown
+                [options]="designations"
+                optionLabel="name"
+                formControlName="designationId"
+                optionValue="id"
+                placeholder="Select Designation"
+                appendTo="body"
+                (onChange)="getDivisionsByDepartment()"
+            ></p-dropdown>
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="cid">CID</label>
+            <input pInputText id="cid" formControlName="cid" type="text" />
+        </div>
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="employeeId">EID</label>
+            <input
+                pInputText
+                id="employeeId"
+                formControlName="employeeId"
+                type="text"
+            />
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="address">Present Address</label>
+            <input
+                pInputText
+                id="address"
+                formControlName="address"
+                type="text"
+            />
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="bio">Bio</label>
+            <textarea
+                pInputTextarea
+                rows="8"
+                formControlName="bio"
+                placeholder="Remarks..."
+                inputId="bio"
+            ></textarea>
+        </div>
+
+        <div class="flex flex-column gap-2 flex-1">
+            <label for="departmentId">Department</label>
+            <p-dropdown
+                [options]="departments"
+                optionLabel="name"
+                optionValue="id"
+                formControlName="departmentId"
+                placeholder="Select Department"
+                appendTo="body"
+                (onChange)="getDivisionsByDepartment()"
+            ></p-dropdown>
+        </div>
+
+        <div class="flex flex-column gap-2 my-3">
+            <label for="divisionId">Division</label>
+            <p-dropdown
+                [options]="divisions"
+                optionLabel="name"
+                optionValue="id"
+                formControlName="divisionId"
+                placeholder="Select Division"
+                appendTo="body"
+                (onChange)="getStaffsByDivision()"
+            ></p-dropdown>
+        </div>
+        <div class="flex justify-content-end gap-4 mt-4">
+            <p-button
+                (click)="updateUserDetails()"
+                label="Update Details"
+            ></p-button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,385 @@
+<div class="flex">
+    <div
+        class="flex flex-column h-full w-7"
+        style="border-right: 4px solid black"
+    >
+        <div
+            class="flex flex-column align-items-center justify-content-center"
+            *ngIf="showPdfLoading"
+        >
+            <p-progressSpinner
+                styleClass="w-4rem h-4rem"
+                strokeWidth="8"
+                fill="var(--surface-ground)"
+                animationDuration=".5s"
+            />
+            <p>Loading letter...</p>
+        </div>
+        <pdf-viewer
+            [src]="letterUri"
+            [render-text]="true"
+            [original-size]="false"
+            style="width: 100%; height: 90vh"
+            (after-load-complete)="pdfLoaded()"
+        ></pdf-viewer>
+    </div>
+
+    <div class="flex flex-column w-5 px-6 main-container">
+        <div *ngIf="letterDetails; else loading">
+            <div
+                class="flex justify-content-between gap-2"
+                style="align-items: center"
+            >
+                <p-tag
+                    [value]="letterDetails.isClosed ? 'Resolved' : 'Pending'"
+                    [severity]="letterDetails.isClosed ? 'success' : 'danger'"
+                >
+                </p-tag>
+                <p class="font-semibold text-xl">
+                    {{ letterDetails.createdAt | date : "mediumDate" }}
+                </p>
+            </div>
+            <p-divider></p-divider>
+            <div>
+                <p class="text-xl font-semibold">
+                    Subject:{{ letterDetails.subject }}
+                </p>
+                <p class="text-lg font-semibold">
+                    Reference: {{ letterDetails.letterHead }}
+                </p>
+                <div class="flex justify-content-end">
+                    <p-button
+                        label="Download Letter"
+                        size="small"
+                        (click)="downloadLetterPdf()"
+                    ></p-button>
+                </div>
+                <p-divider></p-divider>
+
+                <div class="flex align-items-end justify-content-between">
+                    <div class="flex align-items-center gap-2">
+                        <div
+                            *ngIf="
+                                letterDetails.currentDealingOfficer.profileUri
+                            "
+                            class="h-3rem w-3rem"
+                            [ngStyle]="{
+                                'background-image': getProfileUri(
+                                    letterDetails.currentDealingOfficer
+                                        .profileUri
+                                ),
+                                'background-position': 'center',
+                                'background-repeat': 'no-repeat',
+                                'background-size': 'cover',
+                                'border-radius': '100%'
+                            }"
+                        ></div>
+                        <div
+                            *ngIf="
+                                !letterDetails.currentDealingOfficer?.profileUri
+                            "
+                            class="bg-gray-100 flex align-items-center justify-content-center"
+                            style="
+                                width: 3rem;
+                                height: 3rem;
+                                border-radius: 100%;
+                            "
+                        >
+                            <span class="text-3xl font-bold">
+                                {{
+                                    letterDetails.currentDealingOfficer.name.charAt(
+                                        0
+                                    )
+                                }}
+                            </span>
+                        </div>
+                        <!-- 
+                        <div
+                            *ngIf="
+                                !letterDetails.currentDealingOfficer.profileUri
+                            "
+                            class="rounded-full border-2 border-gray-800 bg-gray-400 h-10 w-10 flex justify-center items-center"
+                        >
+                            <p class="uppercase text-md">
+                                {{
+                                    letterDetails.currentDealingOfficer.name.charAt(
+                                        0
+                                    )
+                                }}
+                            </p>
+                        </div> -->
+
+                        <div class="break-words">
+                            <p class="font-semibold">
+                                {{
+                                    letterDetails.isClosed
+                                        ? "Resolved By"
+                                        : "Dealing Official"
+                                }}
+                            </p>
+                            <p class="">
+                                {{ letterDetails.currentDealingOfficer.name }}
+                                <br />
+                                {{
+                                    letterDetails.currentDealingOfficer
+                                        ?.designation.name
+                                }},
+                                {{
+                                    letterDetails.currentDealingOfficer.division
+                                        .abbreviation
+                                }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div *ngIf="letterDetails?.isClosed">
+                        <p>
+                            Resolved on:
+                            <strong>
+                                {{
+                                    letterDetails?.closingDate
+                                        | date : "fullDate"
+                                }}</strong
+                            >
+                        </p>
+                        <p class="mt-1">
+                            Action Taken:
+                            <strong>
+                                {{ letterDetails?.closingRemarks }}</strong
+                            >
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p-divider></p-divider>
+
+            <div
+                class="flex gap-2 justify-content-end"
+                *ngIf="isCurrentDealingOfficial && !letterDetails.isClosed"
+            >
+                <p-button
+                    label="Forward Letter"
+                    size="small"
+                    (click)="openForwardLetterModal()"
+                ></p-button>
+                <p-button
+                    label="Close Letter"
+                    severity="danger"
+                    size="small"
+                    (click)="openCloseLetterModal()"
+                ></p-button>
+                <p-button
+                    label="Upload Response Letter"
+                    size="small"
+                    severity="secondary"
+                ></p-button>
+            </div>
+            <p-tabView>
+                <p-tabPanel header="Letter Details">
+                    <div class="text-left">
+                        <div class="flex justify-content-between w-full">
+                            <div class="w-6">
+                                <p class="font-semibold">Letter From</p>
+                                <p>Office: {{ letterDetails.outOffice }}</p>
+                                <p>
+                                    Department:
+                                    {{ letterDetails.outDepartment }}
+                                </p>
+                                <p>
+                                    Division:
+                                    {{ letterDetails.outDepartment }}
+                                </p>
+                                <p>
+                                    Dzongkhag:
+                                    {{ letterDetails.outDzongkhag }}
+                                </p>
+                            </div>
+
+                            <div class="w-6">
+                                <p class="font-semibold">Letter To</p>
+                                <p>Office: MoWHS</p>
+                                <p>
+                                    Department:
+                                    {{ letterDetails.department.abbreviation }}
+                                </p>
+                                <p>
+                                    Division:
+                                    {{ letterDetails.division?.name }}
+                                </p>
+                                <p>Dzongkhag: Thimphu</p>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Letter Transactions">
+                    <div class="flex flex-column">
+                        <div
+                            *ngIf="letterDetails?.isClosed"
+                            class="shadow-2 my-1 px-4 py-2 border-round bg-green-50"
+                        >
+                            <div class="flex justify-content-between">
+                                <p
+                                    class="text-left font-semibold"
+                                    *ngIf="letterDetails?.closingDate"
+                                >
+                                    {{
+                                        letterDetails?.closingDate
+                                            | date : "fullDate"
+                                    }}
+                                </p>
+                                <p class="flex align-items-center gap-2">
+                                    Resolved
+                                </p>
+                            </div>
+
+                            <div class="flex gap-4 my-4">
+                                <div
+                                    class="flex flex-column align-items-start justify-content-center mb-4"
+                                >
+                                    <div
+                                        *ngIf="
+                                            letterDetails?.closer?.profileUri
+                                        "
+                                        class="border-circle border-2 border-gray-800"
+                                        [ngStyle]="
+                                            getStaffImgUrl(
+                                                letterDetails?.closer
+                                                    ?.profileUri
+                                            )
+                                        "
+                                    ></div>
+                                    <div
+                                        *ngIf="
+                                            !letterDetails?.closer?.profileUri
+                                        "
+                                        class="border-circle border-2 border-gray-800 bg-gray-400 h-6rem w-6rem flex align-items-center justify-content-center"
+                                    >
+                                        <p class="text-uppercase text-md">
+                                            {{
+                                                letterDetails?.closer?.name?.charAt(
+                                                    0
+                                                )
+                                            }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-column flex-1 text-left">
+                                    <div>
+                                        <p>
+                                            Resolved by
+                                            {{ letterDetails?.closer?.name }}
+                                            -
+                                            {{
+                                                letterDetails?.closer
+                                                    ?.designation?.name
+                                            }}
+                                            (
+                                            {{
+                                                letterDetails?.closer?.division
+                                                    ?.abbreviation
+                                            }}
+                                            )
+                                        </p>
+                                        <p class="mt-1">Action Taken:</p>
+                                        <p class="font-semibold">
+                                            {{ letterDetails?.closingRemarks }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngFor="
+                                let block of parentTranscationBlocks;
+                                let i = index
+                            "
+                            class="border-bottom-1 border-gray-300 my-1 p-3 bg-white"
+                            [ngClass]="{
+                                'border-2 border-green-200': i === 0
+                            }"
+                        >
+                            <p class="font-semibold mb-2">
+                                {{ block.createdAt | date : "fullDate" }}
+                            </p>
+                            <div
+                                class="flex align-items-center justify-content-between gap-4"
+                            >
+                                <p class="text-left">
+                                    <strong>{{ block.from?.name }}</strong>
+                                    <br />
+                                    <span class="text-xs">
+                                        {{ block.from?.designation?.name }}
+                                        <br />
+
+                                        {{
+                                            block.from?.division?.abbreviation
+                                        }}</span
+                                    >
+                                </p>
+                                <p class="text-center">
+                                    forwarded <br />
+                                    to
+                                </p>
+                                <p class="text-right">
+                                    <strong> {{ block.to?.name }}</strong>
+                                    <br />
+                                    <span class="text-xs">
+                                        {{ block.to?.designation?.name }} <br />
+                                        {{ block.to?.division?.abbreviation }}
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- <p-divider></p-divider> -->
+
+                            <div
+                                class="flex gap-3 mt-2 border-top-1 border-gray-100 pt-2"
+                                style="align-items: center"
+                            >
+                                <div>
+                                    <div
+                                        *ngIf="block.from?.profileUri"
+                                        class="border-circle border-2 border-gray-800"
+                                        [ngStyle]="
+                                            getStaffImgUrl(
+                                                block.from?.profileUri
+                                            )
+                                        "
+                                    ></div>
+
+                                    <div
+                                        *ngIf="!block.from?.profileUri"
+                                        class="bg-gray-100 flex align-items-center justify-content-center"
+                                        style="
+                                            width: 3rem;
+                                            height: 3rem;
+                                            border-radius: 100%;
+                                        "
+                                    >
+                                        <span class="text-3xl font-bold">
+                                            {{ staff.name.charAt(0) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="font-semibold">
+                                    "{{ block.remarks }}"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+        <ng-template #loading>
+            <div
+                class="flex flex-column align-items-center justify-content-content w-full"
+            >
+                <p>Loading Letter Details</p>
+                <div>
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<div>
+    <p>{{ title }}</p>
+
+    <div class="flex align-items-center mb-2 justify-content-between">
+        <div>
+            <p>
+                Showing {{ paginatedLetters.data.length }} of
+                {{ paginatedLetters.count }} Entries
+            </p>
+        </div>
+        <div>
+            <p-paginator
+                (onPageChange)="onPageChange($event)"
+                [first]="firstPageNumber"
+                [rows]="rows"
+                [totalRecords]="paginatedLetters.count"
+                [rowsPerPageOptions]="rowsPerPageOptions"
+                [showFirstLastIcon]="true"
+            ></p-paginator>
+        </div>
+    </div>
+
+    <p-table
+        [value]="paginatedLetters.data"
+        styleClass="p-datatable-striped mb-2"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Submission Date</th>
+                <th>Status</th>
+                <th>Subject</th>
+                <th>Current State</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr
+                (dblclick)="viewLetter(item)"
+                class="cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+                <td>
+                    <p>{{ item.createdAt | date : "mediumDate" }}</p>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="item.isClosed ? 'Resolved' : 'Pending'"
+                        [severity]="item.isClosed ? 'success' : 'danger'"
+                    >
+                    </p-tag>
+                    <p>
+                        {{ getTaT(item) }}
+                    </p>
+                </td>
+                <td>
+                    <p class="text-lg">
+                        Subject: <strong>{{ item.subject }}</strong>
+                    </p>
+                    <p>{{ item.letterHead }}</p>
+                </td>
+                <td>
+                    <div *ngIf="!item.isClosed">
+                        <p class="font-semibold">Current Dealing Officer</p>
+                        <div class="flex align-items-center gap-4">
+                            <div class="my-1">
+                                <div
+                                    *ngIf="
+                                        item.currentDealingOfficer?.profileUri
+                                    "
+                                    class="border-circle border-1 border-gray-500"
+                                    [ngStyle]="
+                                        getStaffImgUrl(
+                                            item.currentDealingOfficer
+                                                ?.profileUri
+                                        )
+                                    "
+                                ></div>
+                                <div
+                                    *ngIf="
+                                        !item.currentDealingOfficer?.profileUri
+                                    "
+                                    class="border-circle border-1 border-gray-500 bg-gray-400 h-3rem w-3rem flex align-items-center justify-content-center"
+                                >
+                                    <p class="text-uppercase">
+                                        {{
+                                            item.currentDealingOfficer?.name?.charAt(
+                                                0
+                                            )
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <p>{{ item.currentDealingOfficer?.name }}</p>
+                                <p>
+                                    {{
+                                        item.currentDealingOfficer?.designation
+                                            ?.name
+                                    }}
+                                </p>
+                                <p>
+                                    {{
+                                        item.currentDealingOfficer?.division
+                                            ?.abbreviation
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="item.isClosed" class="">
+                        <p>
+                            Letter Closed on
+                            {{ item.closingDate | date : "mediumDate" }}<br />
+                            by {{ item.closer?.name }} -
+                            {{ item.closer?.designation?.name }}
+                            {{ item.closer?.division?.abbreviation }}
+                        </p>
+                        <p>
+                            Remarks:
+
+                            <strong>{{ item.closingRemarks }}</strong>
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p *ngIf="!paginatedLetters.data.length">- No letters to show</p>
+</div>

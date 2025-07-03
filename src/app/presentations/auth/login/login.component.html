@@ -1,0 +1,87 @@
+<div
+    class="bg-gray-100 flex align-items-center justify-content-center min-w-screen overflow-hidden"
+    style="height: 100dvh"
+>
+    <p-toast appendTo="body" />
+    <div
+        class="flex bg-white border-round-xl shadow gap-2 w-10 sm:w-11 md:w-8 lg:w-6"
+        style="min-height: 50vh"
+    >
+        <div
+            class="w-6 border-round-xl hidden md:block"
+            style="
+                background-image: url('assets/images/login.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            "
+        ></div>
+        <div
+            class="w-full md:w-6 p-4 flex flex-column align-items-center justify-content-between"
+            style="min-width: 20vw; min-height: 100%"
+        >
+            <div class="flex flex-column align-items-center cursor-pointer">
+                <img src="assets/logo/logo.png" class="w-4rem" alt="" />
+                <p class="text-4xl font-bold" style="color: #021b49">E-CAMS</p>
+                <p>Correspondence Archival Management System</p>
+            </div>
+
+            <form [formGroup]="loginForm" class="w-full p-4 p-fluid">
+                <div>
+                    <label
+                        for="email1"
+                        class="block font-semibold text-900 mb-2"
+                        >Email</label
+                    >
+                    <input
+                        id="email1"
+                        type="text"
+                        placeholder="Email"
+                        pInputText
+                        autocomplete=""
+                        formControlName="email"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        for="email1"
+                        class="block font-semibold text-900 mt-4 mb-2"
+                        >Password</label
+                    >
+                    <p-password
+                        formControlName="password"
+                        placeholder="your password"
+                        [feedback]="false"
+                    />
+                </div>
+
+                <div class="flex gap-2 mt-6">
+                    <button
+                        pButton
+                        pRipple
+                        label="Login"
+                        class="w-full"
+                        (click)="login()"
+                    ></button>
+                </div>
+            </form>
+
+            <p>Developed by the Geomatics and Logistics Division,DHS</p>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    [modal]="true"
+    [(visible)]="showLoading"
+    closable="false"
+    styleClass=""
+>
+    <div
+        class="flex h-full w-full flex-column align-items-center justify-content-center gap-3"
+    >
+        <div class="loader"></div>
+        <p>verifying...</p>
+    </div>
+</p-dialog>

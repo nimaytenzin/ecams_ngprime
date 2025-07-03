@@ -1,0 +1,33 @@
+/* Custom styling for create user form */
+.p-fluid .p-field {
+    margin-bottom: 1rem;
+}
+
+.p-error {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.ng-invalid.ng-touched {
+    border-color: #e24c4c;
+}
+
+.form-section {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #374151;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid > .col-12.md\:col-6 {
+        padding: 0.5rem;
+    }
+}
