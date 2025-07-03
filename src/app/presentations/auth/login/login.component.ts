@@ -29,28 +29,36 @@ export class LoginComponent {
 
     private initializeLoginForm(): void {
         this.loginForm = this.fb.group({
-            email: [
-                'nytenzin@moit.gov.bt',
-                [Validators.required, Validators.pattern(/^[0-9]{8}$/)],
-            ],
-            password: ['overlord123', [Validators.required]],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required]],
             rememberMe: [false],
         });
     }
 
     private loadRememberedCredentials(): void {
-        if (localStorage.getItem('rememberMe')) {
+        const rememberMe = localStorage.getItem('rememberMe');
+        if (rememberMe === '1') {
             const savedLogin = localStorage.getItem('appState22132');
             if (savedLogin) {
-                const decryptedData = CryptoJS.AES.decrypt(
-                    savedLogin,
-                    '12213123$#$#'
-                ).toString(CryptoJS.enc.Utf8);
-                const parsedCredentials = JSON.parse(decryptedData);
-                this.loginForm.patchValue({
-                    ...parsedCredentials,
-                    rememberMe: true,
-                });
+                try {
+                    const decryptedData = CryptoJS.AES.decrypt(
+                        savedLogin,
+                        '12213123$#$#'
+                    ).toString(CryptoJS.enc.Utf8);
+
+                    if (decryptedData) {
+                        const parsedCredentials = JSON.parse(decryptedData);
+                        this.loginForm.patchValue({
+                            email: parsedCredentials.email || '',
+                            password: parsedCredentials.password || '',
+                            rememberMe: true,
+                        });
+                        console.log('Saved credentials loaded successfully');
+                    }
+                } catch (error) {
+                    console.error('Error loading saved credentials:', error);
+                    this.clearSavedCredentials();
+                }
             }
         }
     }
@@ -94,14 +102,17 @@ export class LoginComponent {
     private saveCredentialsIfRememberMe(loginData: any): void {
         if (this.loginForm.controls['rememberMe'].value) {
             localStorage.setItem('rememberMe', '1');
+            const credentialsToSave = {
+                email: loginData.email,
+                password: loginData.password,
+            };
             const encryptedData = CryptoJS.AES.encrypt(
-                JSON.stringify(loginData),
+                JSON.stringify(credentialsToSave),
                 '12213123$#$#'
             ).toString();
             localStorage.setItem('appState22132', encryptedData);
         } else {
-            localStorage.removeItem('appState22132');
-            localStorage.removeItem('rememberMe');
+            this.clearSavedCredentials();
         }
     }
 
@@ -114,12 +125,38 @@ export class LoginComponent {
         this.showMessage('Error', message);
     }
 
-    private showMessage(summary: string, detail: string): void {
+    private showMessage(
+        summary: string,
+        detail: string,
+        severity: string = 'error'
+    ): void {
         this.messageService.add({
-            severity: 'error',
+            severity: severity as any,
             summary,
             detail,
         });
+    }
+
+    clearSavedCredentials(): void {
+        localStorage.removeItem('appState22132');
+        localStorage.removeItem('rememberMe');
+        this.loginForm.patchValue({
+            email: '',
+            password: '',
+            rememberMe: false,
+        });
+        this.showMessage(
+            'Success',
+            'Saved login credentials cleared.',
+            'success'
+        );
+    }
+
+    hasSavedCredentials(): boolean {
+        return (
+            localStorage.getItem('rememberMe') === '1' &&
+            localStorage.getItem('appState22132') !== null
+        );
     }
 
     backToHome(): void {

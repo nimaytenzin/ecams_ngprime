@@ -56,7 +56,29 @@
                     />
                 </div>
 
-                <div class="flex gap-2 mt-6">
+                <div
+                    class="flex align-items-center justify-content-between mt-4"
+                >
+                    <p-checkbox
+                        formControlName="rememberMe"
+                        label="Remember Me"
+                        [binary]="true"
+                    ></p-checkbox>
+
+                    <button
+                        type="button"
+                        pButton
+                        pRipple
+                        label="Clear Saved"
+                        size="small"
+                        severity="secondary"
+                        *ngIf="hasSavedCredentials()"
+                        (click)="clearSavedCredentials()"
+                        class="p-button-text"
+                    ></button>
+                </div>
+
+                <div class="flex gap-2 mt-4">
                     <button
                         pButton
                         pRipple
