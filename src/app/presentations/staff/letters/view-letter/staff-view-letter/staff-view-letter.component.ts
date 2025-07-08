@@ -16,6 +16,7 @@ import { StaffForwardLetterComponent } from '../components/staff-forward-letter/
 import { TagModule } from 'primeng/tag';
 import { StaffCloseLetterComponent } from '../components/staff-close-letter/staff-close-letter.component';
 import { AuthService } from 'src/app/core/dataservice/User/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-staff-view-letter',
@@ -34,6 +35,7 @@ import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 })
 export class StaffViewLetterComponent implements OnInit {
     showPdfLoading: boolean = true;
+    isDownloading: boolean = false;
 
     letterId: number;
     letterDetails: LetterDTO;
@@ -54,7 +56,8 @@ export class StaffViewLetterComponent implements OnInit {
         private letterTransactionService: LetterTransactionDataService,
         private messageService: MessageService,
         private dialogService: DialogService,
-        private authService: AuthService
+        private authService: AuthService,
+        private http: HttpClient
     ) {
         this.letterId = Number(this.route.snapshot.paramMap.get('letterId'));
     }
@@ -188,5 +191,101 @@ export class StaffViewLetterComponent implements OnInit {
         return `url("${ASSET_URL}/${uri}")`;
     }
 
-    downloadLetterPdf() {}
+    downloadLetterPdf(): void {
+        if (!this.letterDetails || !this.letterDetails.fileUri) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No PDF file available for download',
+            });
+            return;
+        }
+
+        const fileName = this.generateFileName();
+
+        // Show loading message
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Download',
+            detail: 'Preparing PDF download...',
+        });
+
+        this.isDownloading = true; // Set downloading state to true
+
+        // Try to download using HTTP client for better browser compatibility
+        this.http.get(this.letterUri, { responseType: 'blob' }).subscribe({
+            next: (blob) => {
+                this.downloadBlob(blob, fileName);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'PDF downloaded successfully',
+                });
+                this.isDownloading = false; // Reset downloading state
+            },
+            error: (error) => {
+                console.error('Error downloading via HTTP:', error);
+                // Fallback to direct download
+                this.fallbackDownload(fileName);
+                this.isDownloading = false; // Reset downloading state
+            },
+        });
+    }
+
+    private downloadBlob(blob: Blob, fileName: string): void {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Clean up the URL object
+        window.URL.revokeObjectURL(url);
+    }
+
+    private fallbackDownload(fileName: string): void {
+        try {
+            // Create a temporary anchor element for download
+            const link = document.createElement('a');
+            link.href = this.letterUri;
+            link.download = fileName;
+            link.target = '_blank';
+
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'PDF download started',
+            });
+        } catch (error) {
+            console.error('Error in fallback download:', error);
+            // Last resort - open in new tab
+            window.open(this.letterUri, '_blank');
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Info',
+                detail: 'PDF opened in new tab. Please save manually.',
+            });
+        }
+    }
+
+    private generateFileName(): string {
+        const letterId = this.letterDetails.id || 'Unknown';
+        const subject = this.letterDetails.subject
+            ? this.letterDetails.subject
+                  .substring(0, 30)
+                  .replace(/[^a-zA-Z0-9]/g, '_')
+            : 'Letter';
+        const date = new Date().toISOString().split('T')[0];
+
+        return `Letter_${letterId}_${subject}_${date}.pdf`;
+    }
 }

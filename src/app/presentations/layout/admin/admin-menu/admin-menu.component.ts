@@ -19,7 +19,8 @@ export class AdminMenuComponent implements OnInit {
     ngOnInit() {
         console.log('GETTING ROLE ', this.authService.GetCurrentRole());
         const userRole = this.authService.GetCurrentRole().name;
-        this.model = this.filterMenuItemsByRole(ADMINSIDEBARITEMS, userRole);
+        // this.model = this.filterMenuItemsByRole(ADMINSIDEBARITEMS, userRole);
+        this.model = ADMINSIDEBARITEMS;
         console.log(userRole, this.model);
     }
 
