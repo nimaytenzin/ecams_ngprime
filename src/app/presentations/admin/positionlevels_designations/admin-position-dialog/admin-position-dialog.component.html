@@ -1,0 +1,119 @@
+<div class="position-dialog">
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Form Content -->
+    <form
+        [formGroup]="positionForm"
+        (ngSubmit)="onSubmit()"
+        class="position-form"
+    >
+        <!-- Position Name -->
+        <div class="field">
+            <label for="name" class="required-field">Position Name</label>
+            <input
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name"
+                placeholder="Enter position name"
+                maxlength="100"
+                [class.ng-invalid]="isFieldInvalid('name')"
+                class="w-full"
+            />
+
+            <small class="p-error" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError("name") }}
+            </small>
+        </div>
+
+        <!-- Category -->
+        <div class="field">
+            <label for="category" class="required-field">Category</label>
+            <p-dropdown
+                id="category"
+                formControlName="category"
+                [options]="categories"
+                placeholder="Select a category"
+                [showClear]="true"
+                styleClass="w-full"
+                [class.ng-invalid]="isFieldInvalid('category')"
+            >
+            </p-dropdown>
+
+            <small class="p-error" *ngIf="isFieldInvalid('category')">
+                {{ getFieldError("category") }}
+            </small>
+        </div>
+
+        <!-- Hierarchical Level -->
+        <div class="field">
+            <label for="hierarchical_level" class="required-field"
+                >Hierarchical Level</label
+            >
+            <p-inputNumber
+                id="hierarchical_level"
+                formControlName="hierarchical_level"
+                [min]="1"
+                [max]="20"
+                [showButtons]="true"
+                buttonLayout="horizontal"
+                spinnerMode="horizontal"
+                [step]="1"
+                placeholder="Enter level (1-20)"
+                [class.ng-invalid]="isFieldInvalid('hierarchical_level')"
+                styleClass="w-full"
+            >
+            </p-inputNumber>
+
+            <small class="p-error" *ngIf="isFieldInvalid('hierarchical_level')">
+                {{ getFieldError("hierarchical_level") }}
+            </small>
+
+            <small class="field-help">
+                Lower numbers indicate higher hierarchy (1 = highest level)
+            </small>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <p-button
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="onCancel()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Reset"
+                icon="pi pi-refresh"
+                severity="help"
+                (click)="onReset()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="submit"
+                [label]="isEditMode ? 'Update Position' : 'Create Position'"
+                [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+                severity="success"
+                [loading]="isSubmitting"
+                [disabled]="positionForm.invalid || isSubmitting"
+            >
+            </p-button>
+        </div>
+
+        <!-- Form Status Info -->
+        <div class="form-status" *ngIf="positionForm.dirty">
+            <small class="status-text">
+                <i class="pi pi-info-circle"></i>
+                Form has unsaved changes
+            </small>
+        </div>
+    </form>
+</div>

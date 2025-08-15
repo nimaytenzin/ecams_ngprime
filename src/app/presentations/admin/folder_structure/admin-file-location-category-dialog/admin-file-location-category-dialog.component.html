@@ -1,0 +1,75 @@
+<div class="category-dialog">
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Form Content -->
+    <form
+        [formGroup]="categoryForm"
+        (ngSubmit)="onSubmit()"
+        class="category-form"
+    >
+        <!-- Category Name -->
+        <div class="field">
+            <label for="name" class="required-field">Category Name</label>
+            <input
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name"
+                placeholder="Enter category name"
+                maxlength="100"
+                [class.ng-invalid]="isFieldInvalid('name')"
+                class="w-full"
+            />
+
+            <small class="p-error" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError("name") }}
+            </small>
+
+            <small class="field-help">
+                Enter a descriptive name for the file location category
+            </small>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <p-button
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="onCancel()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Reset"
+                icon="pi pi-refresh"
+                severity="help"
+                (click)="onReset()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="submit"
+                [label]="isEditMode ? 'Update Category' : 'Create Category'"
+                [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+                severity="success"
+                [loading]="isSubmitting"
+                [disabled]="categoryForm.invalid || isSubmitting"
+            >
+            </p-button>
+        </div>
+
+        <!-- Form Status Info -->
+        <div class="form-status" *ngIf="categoryForm.dirty">
+            <small class="status-text">
+                <i class="pi pi-info-circle"></i>
+                Form has unsaved changes
+            </small>
+        </div>
+    </form>
+</div>

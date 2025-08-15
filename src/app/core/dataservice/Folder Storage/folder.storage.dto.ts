@@ -13,3 +13,11 @@ export interface FileLocationDTO {
 
     category?: FilelocationCategoryDTO;
 }
+
+export interface CreateFileLocationCategoryDTO {
+    name: string;
+}
+export interface CreateFileLocationDTO {
+    name: string;
+    categoryId: number;
+}

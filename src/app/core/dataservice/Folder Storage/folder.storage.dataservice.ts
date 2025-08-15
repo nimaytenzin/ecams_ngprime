@@ -3,7 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../constants/constants';
 import { DepartmentDTO } from '../Department/department.dto';
-import { FilelocationCategoryDTO, FileLocationDTO } from './folder.storage.dto';
+import {
+    CreateFileLocationCategoryDTO,
+    CreateFileLocationDTO,
+    FilelocationCategoryDTO,
+    FileLocationDTO,
+} from './folder.storage.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -33,5 +38,26 @@ export class FolderStorageDataService {
         return this.http.get<FileLocationDTO[]>(
             `${this.apiUrl}/filelocations/category/${categoryId}`
         );
+    }
+
+    CreateFileLocationCategory(
+        data: CreateFileLocationCategoryDTO
+    ): Observable<FilelocationCategoryDTO> {
+        return this.http.post<FilelocationCategoryDTO>(
+            `${this.apiUrl}/filelocation-category`,
+            data
+        );
+    }
+    CreateFileLocation(
+        data: CreateFileLocationDTO
+    ): Observable<FileLocationDTO> {
+        return this.http.post<FileLocationDTO>(
+            `${this.apiUrl}/filelocations`,
+            data
+        );
+    }
+
+    GetAllFileLocations(): Observable<FileLocationDTO[]> {
+        return this.http.get<FileLocationDTO[]>(`${this.apiUrl}/filelocations`);
     }
 }

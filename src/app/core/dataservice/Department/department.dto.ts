@@ -10,3 +10,19 @@ export interface DepartmentDTO {
 
     divisions: DivisionDTO[];
 }
+
+export interface CreateDepartmentDTO {
+    name: string;
+    abbreviation: string;
+    description: string;
+    vision: string;
+    mission: string;
+}
+
+export interface UpdateDepartmentDTO {
+    name: string;
+    abbreviation: string;
+    description: string;
+    vision: string;
+    mission: string;
+}

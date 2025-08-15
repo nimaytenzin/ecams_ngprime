@@ -71,12 +71,14 @@ export class StaffDashboardComponent implements OnInit {
                     this.pendingLetterTransactions = res;
                 },
             });
-        this.letterDataService.GetLatest12Letters().subscribe({
-            next: (res) => {
-                this.latestLetters = res;
-                console.log(this.latestLetters);
-            },
-        });
+        this.letterDataService
+            .GetLatest12Letters(this.authenticatedUser.department.id)
+            .subscribe({
+                next: (res) => {
+                    this.latestLetters = res;
+                    console.log(this.latestLetters);
+                },
+            });
     }
 
     getPaymentsSummary() {}

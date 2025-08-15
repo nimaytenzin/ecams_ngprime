@@ -8,7 +8,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../constants/constants';
-import { DepartmentDTO } from './department.dto';
+import {
+    CreateDepartmentDTO,
+    DepartmentDTO,
+    UpdateDepartmentDTO,
+} from './department.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -25,5 +29,19 @@ export class DepartmentDataService {
 
     GetAllDepartments(): Observable<DepartmentDTO[]> {
         return this.http.get<DepartmentDTO[]>(`${this.apiUrl}/departments`);
+    }
+
+    CreateDepartment(data: CreateDepartmentDTO): Observable<DepartmentDTO> {
+        return this.http.post<DepartmentDTO>(
+            `${this.apiUrl}/departments`,
+            data
+        );
+    }
+
+    UpdateDepartment(departmentId: number, data: UpdateDepartmentDTO) {
+        return this.http.put<any>(
+            `${this.apiUrl}/departments/${departmentId}`,
+            data
+        );
     }
 }

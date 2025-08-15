@@ -1,0 +1,159 @@
+<div class="position-designation-container">
+    <!-- Page Header -->
+    <div class="flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="pi pi-users"></i>
+            Position Levels & Designations
+        </h2>
+    </div>
+
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Two Column Grid -->
+    <div class="grid">
+        <!-- Left Column - Position Levels -->
+        <div class="col-12 lg:col-6">
+            <p-card>
+                <ng-template pTemplate="header">
+                    <div
+                        class="p-4 flex justify-content-between align-items-center"
+                    >
+                        <p class="text-2xl font-semibold">Position Levels</p>
+                        <p-button
+                            icon="pi pi-plus"
+                            label="Add Position"
+                            severity="success"
+                            size="small"
+                            (click)="addPosition()"
+                        >
+                        </p-button>
+                    </div>
+                </ng-template>
+
+                <p-table [value]="positions" [loading]="loadingPositions">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Level</th>
+                            <th>Position Name</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-position>
+                        <tr>
+                            <td>
+                                <p>
+                                    {{ position.hierarchical_level }}
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ position.name }}
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ position.category }}
+                                </p>
+                            </td>
+                            <td>
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    pTooltip="Edit Position"
+                                    severity="secondary"
+                                    size="small"
+                                    (click)="editPosition(position)"
+                                >
+                                </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="empty-state">
+                                    <i class="pi pi-info-circle"></i>
+                                    <p>No position levels found</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+        </div>
+
+        <!-- Right Column - Designations -->
+        <div class="col-12 lg:col-6">
+            <p-card>
+                <ng-template pTemplate="header">
+                    <div
+                        class="p-4 flex justify-content-between align-items-center"
+                    >
+                        <p class="text-2xl font-semibold">Designations</p>
+                        <p-button
+                            icon="pi pi-plus"
+                            label="Add Designation"
+                            severity="success"
+                            size="small"
+                            (click)="addDesignation()"
+                        >
+                        </p-button>
+                    </div>
+                </ng-template>
+
+                <p-table
+                    [value]="designations"
+                    [loading]="loadingDesignations"
+                    styleClass="p-datatable-sm"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>#</th>
+                            <th>Designation Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template
+                        pTemplate="body"
+                        let-designation
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr>
+                            <td>
+                                {{ rowIndex + 1 }}
+                            </td>
+                            <td>
+                                {{ designation.name }}
+                            </td>
+                            <td>
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    severity="secondary"
+                                    size="small"
+                                    pTooltip="Edit Designation"
+                                    (click)="editDesignation(designation)"
+                                >
+                                </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="3" class="text-center">
+                                <div class="empty-state">
+                                    <i class="pi pi-info-circle"></i>
+                                    <p>No designations found</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+        </div>
+    </div>
+</div>

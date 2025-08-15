@@ -1,0 +1,268 @@
+.management-container {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.management-header {
+  margin-bottom: 2rem;
+}
+
+.management-title {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.management-subtitle {
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Category Card Styling */
+.category-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.category-name {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.category-meta {
+  font-weight: 500;
+}
+
+/* File Location Items */
+.file-location-item {
+  background: var(--surface-ground);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.file-location-item:hover {
+  background: var(--surface-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.file-locations-grid {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.empty-locations {
+  background: var(--surface-50);
+  border: 2px dashed var(--surface-300);
+  border-radius: var(--border-radius);
+  margin: 1rem;
+}
+
+/* Card Styling */
+::ng-deep .p-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--surface-border);
+  overflow: hidden;
+}
+
+::ng-deep .p-card .p-card-header {
+  padding: 0;
+  border-bottom: 1px solid var(--surface-border);
+  background: var(--surface-50);
+}
+
+::ng-deep .p-card .p-card-content {
+  padding: 0;
+}
+
+/* Empty State */
+.empty-state {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  max-width: 300px;
+  margin: 0 auto 1.5rem;
+}
+
+/* Loading State */
+.loading-container {
+  padding: 3rem;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .management-container {
+    padding: 0.5rem;
+  }
+  
+  .management-title {
+    font-size: 1.5rem;
+  }
+  
+  .category-name {
+    font-size: 1.1rem;
+  }
+  
+  .file-locations-grid {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .management-header .flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  
+  .management-header .flex:last-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .file-location-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Stack buttons vertically on mobile */
+  ::ng-deep .category-card .p-card-header .flex .flex:last-child {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  ::ng-deep .category-card .p-card-header .flex .flex:last-child .p-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .file-location-item .flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .file-location-item .flex .flex:last-child {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .empty-state {
+    padding: 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Animation */
+.management-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.category-card {
+  animation: slideUp 0.4s ease-out;
+}
+
+.category-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.category-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.category-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading States */
+.pi-spin {
+  animation-duration: 1s;
+}
+
+/* Tag Styling */
+::ng-deep .p-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Button Overrides */
+::ng-deep .p-button.p-button-text {
+  padding: 0.5rem;
+  min-width: auto;
+}
+
+::ng-deep .p-button.p-button-text .p-button-icon {
+  margin: 0;
+}
+
+/* Header Button Styling */
+::ng-deep .p-card-header .p-button {
+  height: 2rem;
+  padding: 0 0.75rem;
+}
+
+/* Grid spacing */
+.categories-container {
+  gap: 1rem;
+}
+
+/* Hover effects */
+.file-location-item,
+.empty-locations {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Success button styling */
+::ng-deep .p-button.p-button-success {
+  background: var(--green-500);
+  border-color: var(--green-500);
+}
+
+::ng-deep .p-button.p-button-success:hover {
+  background: var(--green-600);
+  border-color: var(--green-600);
+}

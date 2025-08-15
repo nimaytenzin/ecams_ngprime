@@ -288,4 +288,92 @@ export class StaffViewLetterComponent implements OnInit {
 
         return `Letter_${letterId}_${subject}_${date}.pdf`;
     }
+
+    // Attachment related methods
+    getFileIcon(fileUri: string): string {
+        const extension = this.getFileExtension(fileUri);
+        switch (extension) {
+            case 'pdf':
+                return 'pi-file-pdf';
+            case 'doc':
+            case 'docx':
+                return 'pi-file-word';
+            case 'xls':
+            case 'xlsx':
+                return 'pi-file-excel';
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+                return 'pi-image';
+            case 'zip':
+            case 'rar':
+                return 'pi-file-archive';
+            default:
+                return 'pi-file';
+        }
+    }
+
+    getFileName(fileUri: string): string {
+        if (!fileUri) return 'Unknown file';
+        const parts = fileUri.split('/');
+        return parts[parts.length - 1] || 'Unknown file';
+    }
+
+    getFileExtension(fileUri: string): string {
+        if (!fileUri) return '';
+        const fileName = this.getFileName(fileUri);
+        const lastDot = fileName.lastIndexOf('.');
+        return lastDot > -1
+            ? fileName.substring(lastDot + 1).toLowerCase()
+            : '';
+    }
+
+    isViewable(fileUri: string): boolean {
+        const extension = this.getFileExtension(fileUri);
+        const viewableTypes = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
+        return viewableTypes.includes(extension);
+    }
+
+    downloadAttachment(attachment: any): void {
+        if (!attachment.fileUri) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Attachment file not found',
+            });
+            return;
+        }
+
+        const downloadUrl = `${ASSET_URL}/${attachment.fileUri}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = this.getFileName(attachment.fileUri);
+        link.target = '_blank';
+
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `Downloading: ${attachment.title}`,
+        });
+    }
+
+    viewAttachment(attachment: any): void {
+        if (!attachment.fileUri) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Attachment file not found',
+            });
+            return;
+        }
+
+        const viewUrl = `${ASSET_URL}/${attachment.fileUri}`;
+        window.open(viewUrl, '_blank');
+    }
 }

@@ -1,0 +1,148 @@
+<p-toast />
+
+<div class="attachment-modal">
+    <div class="modal-header">
+        <h3>Manage Letter Attachments</h3>
+        <div class="letter-info">
+            <p><strong>Reference:</strong> {{ letterReference }}</p>
+            <p><strong>Subject:</strong> {{ letterSubject }}</p>
+        </div>
+    </div>
+
+    <div class="modal-content">
+        <!-- Existing Attachments -->
+        <div class="attachments-section" *ngIf="attachments.length > 0">
+            <h4>Current Attachments ({{ attachments.length }})</h4>
+            <div class="attachments-list">
+                <div
+                    *ngFor="let attachment of attachments"
+                    class="attachment-item"
+                >
+                    <div class="attachment-info">
+                        <i class="pi pi-file" style="margin-right: 8px"></i>
+                        <span class="attachment-title">{{
+                            attachment.title
+                        }}</span>
+                    </div>
+                    <p-button
+                        icon="pi pi-times"
+                        severity="danger"
+                        size="small"
+                        text="true"
+                        (click)="onRemoveAttachment(attachment.id)"
+                        [disabled]="true"
+                        title="Remove attachment (feature coming soon)"
+                    ></p-button>
+                </div>
+            </div>
+        </div>
+
+        <p-divider *ngIf="attachments.length > 0"></p-divider>
+
+        <!-- Add New Attachment -->
+        <div class="add-attachment-section">
+            <h4>Add New Attachment</h4>
+
+            <div class="form-field">
+                <label for="attachmentTitle">Attachment Title *</label>
+                <input
+                    type="text"
+                    id="attachmentTitle"
+                    [(ngModel)]="attachmentTitle"
+                    placeholder="Enter attachment title..."
+                    class="p-inputtext w-full"
+                    [disabled]="uploading"
+                />
+            </div>
+
+            <div class="form-field">
+                <label>Select File *</label>
+                <div class="file-upload-container">
+                    <input
+                        type="file"
+                        id="attachmentFile"
+                        (change)="onFileSelect($event)"
+                        style="display: none"
+                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    />
+
+                    <div class="file-selection" *ngIf="!selectedFile">
+                        <p-button
+                            label="Choose File"
+                            icon="pi pi-upload"
+                            (click)="triggerFileInput()"
+                            [disabled]="uploading"
+                            severity="secondary"
+                        ></p-button>
+                        <small class="file-hint"
+                            >Supported: PDF, DOC, DOCX, JPG, PNG</small
+                        >
+                    </div>
+
+                    <div class="selected-file" *ngIf="selectedFile">
+                        <div class="file-info">
+                            <i class="pi pi-file" style="margin-right: 8px"></i>
+                            <span>{{ selectedFile.name }}</span>
+                            <span class="file-size"
+                                >({{
+                                    (selectedFile.size / 1024 / 1024).toFixed(2)
+                                }}
+                                MB)</span
+                            >
+                        </div>
+                        <p-button
+                            icon="pi pi-times"
+                            severity="danger"
+                            size="small"
+                            text="true"
+                            (click)="selectedFile = null"
+                            [disabled]="uploading"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+
+            <p-button
+                label="Upload Attachment"
+                icon="pi pi-upload"
+                (click)="onUploadAttachment()"
+                [disabled]="!attachmentTitle || !selectedFile || uploading"
+                [loading]="uploading"
+                styleClass="w-full"
+            ></p-button>
+        </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="modal-footer">
+        <p-button
+            label="Cancel"
+            severity="secondary"
+            text="true"
+            (click)="onCancel()"
+            [disabled]="uploading"
+        >
+        </p-button>
+
+        <p-button
+            label="Skip Attachments"
+            severity="secondary"
+            (click)="onSkip()"
+            [disabled]="uploading"
+            *ngIf="attachments.length === 0"
+        >
+        </p-button>
+
+        <p-button
+            [label]="
+                attachments.length > 0
+                    ? 'Proceed with ' + attachments.length + ' attachment(s)'
+                    : 'Proceed'
+            "
+            (click)="onProceed()"
+            [disabled]="uploading"
+        >
+        </p-button>
+    </div>
+</div>

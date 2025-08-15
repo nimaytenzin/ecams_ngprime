@@ -4,3 +4,9 @@ export interface PositionDTO {
     category: string;
     hierarchical_level: number;
 }
+
+export interface CreatePositionDTO {
+    name: string;
+    category: string;
+    hierarchical_level: number;
+}

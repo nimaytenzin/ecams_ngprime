@@ -1,0 +1,77 @@
+<div class="designation-dialog">
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Form Content -->
+    <form
+        [formGroup]="designationForm"
+        (ngSubmit)="onSubmit()"
+        class="designation-form"
+    >
+        <!-- Designation Name -->
+        <div class="field">
+            <label for="name" class="required-field">Designation Name</label>
+            <input
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name"
+                placeholder="Enter designation name"
+                maxlength="100"
+                [class.ng-invalid]="isFieldInvalid('name')"
+                class="w-full"
+            />
+
+            <small class="p-error" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError("name") }}
+            </small>
+
+            <small class="field-help">
+                Enter a descriptive name for the designation
+            </small>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <p-button
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="onCancel()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Reset"
+                icon="pi pi-refresh"
+                severity="help"
+                (click)="onReset()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="submit"
+                [label]="
+                    isEditMode ? 'Update Designation' : 'Create Designation'
+                "
+                [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+                severity="success"
+                [loading]="isSubmitting"
+                [disabled]="designationForm.invalid || isSubmitting"
+            >
+            </p-button>
+        </div>
+
+        <!-- Form Status Info -->
+        <div class="form-status" *ngIf="designationForm.dirty">
+            <small class="status-text">
+                <i class="pi pi-info-circle"></i>
+                Form has unsaved changes
+            </small>
+        </div>
+    </form>
+</div>

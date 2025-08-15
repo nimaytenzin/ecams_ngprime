@@ -161,7 +161,7 @@ export class StaffCreateUserComponent implements OnInit {
     createUser() {
         if (this.createUserForm.valid) {
             this.isSubmitting = true;
-            const formData = { ...this.createUserForm.value };
+            const formData = { ...this.createUserForm.value, role: 'staff' };
 
             // Keep both password and confirmPassword for backend validation
             // Remove confirmPassword from the data sent to the server

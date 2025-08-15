@@ -1,0 +1,444 @@
+.upload-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.upload-title {
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.upload-subtitle {
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.mode-pill-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.mode-pill {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Progress Steps */
+.progress-steps {
+  background: var(--surface-ground);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.step-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-200);
+  color: var(--text-color-secondary);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-indicator.active {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-indicator.completed {
+  background: var(--green-500);
+  color: white;
+}
+
+.step-indicator.clickable {
+  cursor: pointer;
+}
+
+.step-indicator.clickable:hover {
+  transform: scale(1.05);
+}
+
+.step-indicator:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 2px;
+  background: var(--surface-300);
+  z-index: -1;
+}
+
+.current-step-title {
+  text-align: center;
+}
+
+.current-step-title h3 {
+  color: var(--primary-color);
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Step Cards */
+.step-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--surface-border);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--surface-border);
+  background: var(--surface-50);
+}
+
+.card-header h3 {
+  color: var(--primary-color);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card-header p {
+  color: var(--text-color-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Mode Selection */
+.mode-selection {
+  padding: 2rem;
+}
+
+.mode-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.mode-option {
+  padding: 2rem;
+  border: 2px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--surface-ground);
+}
+
+.mode-option:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.mode-option.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-50);
+}
+
+.mode-option.outgoing.selected {
+  border-color: var(--green-500);
+  background: var(--green-50);
+}
+
+.mode-option.incoming.selected {
+  border-color: var(--blue-500);
+  background: var(--blue-50);
+}
+
+.mode-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.mode-option.outgoing .mode-icon {
+  color: var(--green-500);
+}
+
+.mode-option.incoming .mode-icon {
+  color: var(--blue-500);
+}
+
+.mode-option h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.mode-option p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  line-height: 1.4;
+}
+
+/* Form Content */
+.form-content {
+  padding: 2rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.field label.required::after {
+  content: ' *';
+  color: var(--red-500);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+/* File Upload Section */
+.file-upload-section {
+  padding: 2rem;
+}
+
+.file-upload-area {
+  text-align: center;
+  padding: 2rem;
+  border: 2px dashed var(--surface-300);
+  border-radius: var(--border-radius);
+  background: var(--surface-50);
+}
+
+.upload-info {
+  margin-top: 1rem;
+}
+
+/* Selected File */
+.selected-file {
+  background: var(--surface-50);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+.file-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+/* Upload Summary */
+.upload-summary {
+  padding: 2rem;
+}
+
+.upload-summary-details h4 {
+  color: var(--primary-color);
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.summary-item label {
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.summary-item span {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .upload-container {
+    padding: 1rem;
+  }
+  
+  .mode-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-indicators {
+    gap: 0.5rem;
+  }
+  
+  .step-indicator {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  
+  .step-indicator:not(:last-child)::after {
+    width: 0.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .upload-title {
+    font-size: 1.5rem;
+  }
+  
+  .mode-option {
+    padding: 1.5rem;
+  }
+  
+  .mode-icon {
+    font-size: 2rem;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .file-upload-area {
+    padding: 1.5rem;
+  }
+  
+  .step-indicators {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Animations */
+.step-card {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* PrimeNG Component Overrides */
+::ng-deep .p-card .p-card-header {
+  padding: 0;
+}
+
+::ng-deep .p-card .p-card-content {
+  padding: 0;
+}
+
+::ng-deep .p-button {
+  height: 2.5rem;
+  padding: 0 1.5rem;
+}
+
+::ng-deep .p-fileupload .p-button {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+::ng-deep .p-tag {
+  font-weight: 500;
+}
+
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+::ng-deep .p-inputtext {
+  width: 100%;
+}
+
+::ng-deep .p-inputtext:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem var(--primary-color-text);
+}
+
+::ng-deep .ng-invalid.ng-touched {
+  border-color: var(--red-500);
+}
+
+::ng-deep .p-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

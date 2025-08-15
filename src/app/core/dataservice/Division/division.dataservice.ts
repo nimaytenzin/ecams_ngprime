@@ -8,7 +8,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../constants/constants';
-import { DivisionDTO } from './division.dto';
+import { CreateDivisionDTO, DivisionDTO } from './division.dto';
 import { DepartmentDTO } from '../Department/department.dto';
 
 @Injectable({
@@ -22,5 +22,9 @@ export class DivisionDataService {
         return this.http.get<DivisionDTO[]>(
             `${this.apiUrl}/divisions/department/${departmentId}`
         );
+    }
+
+    CreateDivision(data: CreateDivisionDTO): Observable<DivisionDTO> {
+        return this.http.post<DivisionDTO>(`${this.apiUrl}/divisions`, data);
     }
 }

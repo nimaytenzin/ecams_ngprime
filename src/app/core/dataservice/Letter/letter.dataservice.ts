@@ -24,8 +24,10 @@ export class LetterDataService {
 
     constructor(private http: HttpClient, private router: Router) {}
 
-    GetLatest12Letters(): Observable<LetterDTO[]> {
-        return this.http.get<LetterDTO[]>(`${this.apiUrl}/letter/latest/12`);
+    GetLatest12Letters(departmentId: number): Observable<LetterDTO[]> {
+        return this.http.get<LetterDTO[]>(
+            `${this.apiUrl}/letter/latest/12/${departmentId}`
+        );
     }
 
     GetAllPendingLetterByStaff(staffId: number): Observable<LetterDTO[]> {
@@ -59,32 +61,6 @@ export class LetterDataService {
             `${this.apiUrl}/letter/fuzzySearch/${searchText}`
         );
     }
-
-    // GetAllUnitLeaseByAdminPaginated(
-    //     adminId: number,
-    //     params?: PaginatedParamsOptions
-    // ): Observable<PaginatedData<LeaseAgreeementDTO>> {
-    //     let httpParams = new HttpParams();
-    //     if (params) {
-    //         if (params.pageNo !== undefined) {
-    //             httpParams = httpParams.append(
-    //                 'pageNo',
-    //                 params.pageNo.toString()
-    //             );
-    //         }
-    //         if (params.pageSize !== undefined) {
-    //             httpParams = httpParams.append(
-    //                 'pageSize',
-    //                 params.pageSize.toString()
-    //             );
-    //         }
-    //     }
-
-    //     return this.http.get<PaginatedData<LeaseAgreeementDTO>>(
-    //         `${this.apiUrl}/lease-agreement/admin/unit/p/${adminId}`,
-    //         { params: httpParams }
-    //     );
-    // }
 
     GetAllLettersByDepartmentPaginated(
         departmentId: number,
@@ -158,6 +134,41 @@ export class LetterDataService {
         return this.http.get<PaginatedData<LetterDTO>>(
             `${this.apiUrl}/letter/resolved/p/${departmentId}`,
             { params: httpParams }
+        );
+    }
+
+    AddNewLetter(data: CreateLetterDTO): Observable<LetterDTO> {
+        return this.http.post<LetterDTO>(`${this.apiUrl}/letter`, data);
+    }
+
+    UploadLetterToArchive(
+        department: string,
+        division: string,
+        folderName: string,
+        year: number,
+        letterId: number,
+        formData: FormData
+    ): Observable<any> {
+        return this.http.put(
+            `${this.apiUrl}/letter/store-letter/${department}/${division}/${folderName}/${year}/${letterId}`,
+            formData
+        );
+    }
+
+    UploadLetterFile(letterId: number, formData: FormData): Observable<any> {
+        return this.http.put(
+            `${this.apiUrl}/letter/upload/${letterId}`,
+            formData
+        );
+    }
+
+    UploadAttachment(data: FormData): Observable<any> {
+        return this.http.post(`${this.apiUrl}/attachments`, data);
+    }
+
+    GetAttachmentsByLetter(letterId: number): Observable<any[]> {
+        return this.http.get<any[]>(
+            `${this.apiUrl}/attachments/letterId/${letterId}`
         );
     }
 }

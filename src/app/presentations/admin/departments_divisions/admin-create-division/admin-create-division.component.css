@@ -1,0 +1,299 @@
+.create-division-dialog {
+  max-width: 600px;
+  width: 100%;
+  padding: 0;
+}
+
+.dialog-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.dialog-header h3 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.department-context {
+  color: var(--text-color-secondary);
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+
+.division-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.required-field::after {
+  content: " *";
+  color: var(--red-500);
+}
+
+.field-error {
+  color: var(--red-500);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.field-help {
+  color: var(--text-color-secondary);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.character-count {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.character-count small {
+  color: var(--text-color-secondary);
+  font-size: 0.75rem;
+}
+
+/* Department Selection Styles */
+.department-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.department-name {
+  font-weight: 500;
+}
+
+.department-abbr {
+  color: var(--text-color-secondary);
+  font-size: 0.85rem;
+}
+
+.department-option {
+  padding: 0.5rem 0;
+}
+
+.department-option .department-name {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.department-details {
+  color: var(--text-color-secondary);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.department-details .description {
+  color: var(--text-color-secondary);
+}
+
+/* Selected Department Display */
+.department-display {
+  margin-bottom: 1rem;
+}
+
+.selected-department-card {
+  background: var(--surface-ground);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.department-info h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.department-info .department-abbr {
+  color: var(--text-color-secondary);
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.department-info .department-desc {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Form Status */
+.form-status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--blue-50);
+  border: 1px solid var(--blue-200);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.status-text {
+  color: var(--blue-700);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* PrimeNG Component Overrides */
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+::ng-deep .p-dropdown-panel {
+  max-width: none;
+}
+
+::ng-deep .p-inputtext,
+::ng-deep .p-inputtextarea {
+  width: 100%;
+}
+
+::ng-deep .p-button {
+  height: 2.5rem;
+  padding: 0 1rem;
+}
+
+::ng-deep .p-button-secondary {
+  background: var(--surface-100);
+  border-color: var(--surface-300);
+  color: var(--text-color);
+}
+
+::ng-deep .p-button-secondary:hover {
+  background: var(--surface-200);
+  border-color: var(--surface-400);
+}
+
+::ng-deep .p-button-help {
+  background: var(--bluegray-500);
+  border-color: var(--bluegray-500);
+}
+
+::ng-deep .p-button-help:hover {
+  background: var(--bluegray-600);
+  border-color: var(--bluegray-600);
+}
+
+::ng-deep .p-inputtext.p-invalid,
+::ng-deep .p-inputtextarea.p-invalid,
+::ng-deep .p-dropdown.p-invalid {
+  border-color: var(--red-500);
+}
+
+::ng-deep .p-inputtext:focus,
+::ng-deep .p-inputtextarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem var(--primary-color-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .create-division-dialog {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons ::ng-deep .p-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .dialog-header h3 {
+    font-size: 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .department-context {
+    font-size: 0.85rem;
+  }
+}
+
+/* Animation */
+.division-form {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.form-group.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Focus Management */
+.form-group:focus-within label {
+  color: var(--primary-color);
+}
+
+/* Error State Animation */
+.field-error {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

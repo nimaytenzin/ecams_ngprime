@@ -168,11 +168,11 @@
                     size="small"
                     (click)="openCloseLetterModal()"
                 ></p-button>
-                <p-button
+                <!-- <p-button
                     label="Upload Response Letter"
                     size="small"
                     severity="secondary"
-                ></p-button>
+                ></p-button> -->
             </div>
             <p-tabView>
                 <p-tabPanel header="Letter Details">
@@ -358,7 +358,7 @@
                                         "
                                     >
                                         <span class="text-3xl font-bold">
-                                            {{ staff.name.charAt(0) }}
+                                            {{ block.from?.name?.charAt(0) }}
                                         </span>
                                     </div>
                                 </div>
@@ -367,6 +367,104 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Attachments">
+                    <div class="attachments-section">
+                        <div
+                            *ngIf="
+                                letterDetails?.attachments &&
+                                    letterDetails.attachments.length > 0;
+                                else noAttachments
+                            "
+                        >
+                            <div class="flex align-items-center gap-2 mb-3">
+                                <i
+                                    class="pi pi-paperclip text-xl text-blue-600"
+                                ></i>
+                                <h4 class="m-0">
+                                    Letter Attachments ({{
+                                        letterDetails.attachments.length
+                                    }})
+                                </h4>
+                            </div>
+
+                            <div class="attachments-grid">
+                                <div
+                                    *ngFor="
+                                        let attachment of letterDetails.attachments;
+                                        let i = index
+                                    "
+                                    class="attachment-card"
+                                >
+                                    <div class="attachment-header">
+                                        <div class="attachment-icon">
+                                            <i
+                                                class="pi"
+                                                [ngClass]="
+                                                    getFileIcon(
+                                                        attachment.fileUri
+                                                    )
+                                                "
+                                            ></i>
+                                        </div>
+                                        <div class="attachment-info">
+                                            <h5 class="attachment-title">
+                                                {{ attachment.title }}
+                                            </h5>
+                                            <small class="attachment-meta">
+                                                {{
+                                                    getFileName(
+                                                        attachment.fileUri
+                                                    )
+                                                }}
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <div class="attachment-actions">
+                                        <p-button
+                                            icon="pi pi-download"
+                                            severity="secondary"
+                                            size="small"
+                                            text="true"
+                                            (click)="
+                                                downloadAttachment(attachment)
+                                            "
+                                            title="Download attachment"
+                                        ></p-button>
+                                        <p-button
+                                            icon="pi pi-eye"
+                                            severity="info"
+                                            size="small"
+                                            text="true"
+                                            (click)="viewAttachment(attachment)"
+                                            title="View attachment"
+                                            *ngIf="
+                                                isViewable(attachment.fileUri)
+                                            "
+                                        ></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #noAttachments>
+                            <div class="no-attachments">
+                                <div class="text-center py-4">
+                                    <i
+                                        class="pi pi-paperclip text-6xl text-gray-300 mb-3"
+                                    ></i>
+                                    <h4 class="text-gray-500 mb-2">
+                                        No Attachments
+                                    </h4>
+                                    <p class="text-gray-400 text-sm">
+                                        This letter has no additional
+                                        attachments
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                 </p-tabPanel>
             </p-tabView>

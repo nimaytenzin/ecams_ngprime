@@ -1,0 +1,65 @@
+<p-toast />
+
+<div class="action-modal">
+    <div class="modal-header">
+        <h3>What would you like to do next?</h3>
+        <div class="letter-info" *ngIf="letterSubject || letterReference">
+            <p *ngIf="letterReference">
+                <strong>Reference:</strong> {{ letterReference }}
+            </p>
+            <p *ngIf="letterSubject">
+                <strong>Subject:</strong> {{ letterSubject }}
+            </p>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">
+            Your letter has been uploaded successfully. Choose your next action:
+        </p>
+    </div>
+
+    <div class="modal-content">
+        <div class="action-options">
+            <div class="action-card forward-card" (click)="onForwardLetter()">
+                <div class="action-icon">
+                    <i class="pi pi-send"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Forward Letter</h4>
+                    <p>
+                        Send this letter to another staff member or department
+                        for further action
+                    </p>
+                </div>
+                <div class="action-arrow">
+                    <i class="pi pi-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="action-card close-card" (click)="onCloseLetter()">
+                <div class="action-icon">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Close Letter</h4>
+                    <p>
+                        Mark this letter as resolved and provide closing remarks
+                    </p>
+                </div>
+                <div class="action-arrow">
+                    <i class="pi pi-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="modal-footer">
+        <p-button
+            label="Skip for Now"
+            severity="secondary"
+            text="true"
+            (click)="onSkip()"
+        >
+        </p-button>
+    </div>
+</div>

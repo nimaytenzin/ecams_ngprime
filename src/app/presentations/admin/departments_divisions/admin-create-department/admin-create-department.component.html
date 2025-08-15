@@ -1,0 +1,185 @@
+<p-card header="Department Information" styleClass="h-full">
+    <form
+        [formGroup]="departmentForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="departmentForm"
+    >
+        <div class="grid">
+            <!-- Department Name -->
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label for="name" class="block font-semibold mb-2">
+                        Department Name
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        pInputText
+                        id="name"
+                        formControlName="name"
+                        placeholder="Enter department name"
+                        class="w-full"
+                        [class.ng-invalid]="isFieldInvalid('name')"
+                    />
+                    <small
+                        *ngIf="isFieldInvalid('name')"
+                        class="p-error block mt-1"
+                    >
+                        {{ getFieldError("name") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Abbreviation -->
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label for="abbreviation" class="block font-semibold mb-2">
+                        Abbreviation
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        pInputText
+                        id="abbreviation"
+                        formControlName="abbreviation"
+                        placeholder="e.g., DHS, MoF"
+                        class="w-full"
+                        [class.ng-invalid]="isFieldInvalid('abbreviation')"
+                        style="text-transform: uppercase"
+                    />
+                    <small
+                        *ngIf="isFieldInvalid('abbreviation')"
+                        class="p-error block mt-1"
+                    >
+                        {{ getFieldError("abbreviation") }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+                <div class="field">
+                    <label for="description" class="block font-semibold mb-2">
+                        Description
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        pInputTextarea
+                        id="description"
+                        formControlName="description"
+                        rows="4"
+                        placeholder="Provide a detailed description of the department's role and responsibilities"
+                        class="w-full"
+                        [class.ng-invalid]="isFieldInvalid('description')"
+                    >
+                    </textarea>
+                    <small
+                        *ngIf="isFieldInvalid('description')"
+                        class="p-error block mt-1"
+                    >
+                        {{ getFieldError("description") }}
+                    </small>
+                    <small class="text-muted block mt-1">
+                        {{
+                            departmentForm.get("description")?.value?.length ||
+                                0
+                        }}/500 characters
+                    </small>
+                </div>
+            </div>
+
+            <!-- Vision -->
+            <div class="col-12">
+                <div class="field">
+                    <label for="vision" class="block font-semibold mb-2">
+                        Vision Statement
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        pInputTextarea
+                        id="vision"
+                        formControlName="vision"
+                        rows="3"
+                        placeholder="Describe the department's long-term vision and aspirations"
+                        class="w-full"
+                        [class.ng-invalid]="isFieldInvalid('vision')"
+                    >
+                    </textarea>
+                    <small
+                        *ngIf="isFieldInvalid('vision')"
+                        class="p-error block mt-1"
+                    >
+                        {{ getFieldError("vision") }}
+                    </small>
+                    <small class="text-muted block mt-1">
+                        {{
+                            departmentForm.get("vision")?.value?.length || 0
+                        }}/1000 characters
+                    </small>
+                </div>
+            </div>
+
+            <!-- Mission -->
+            <div class="col-12">
+                <div class="field">
+                    <label for="mission" class="block font-semibold mb-2">
+                        Mission Statement
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        pInputTextarea
+                        id="mission"
+                        formControlName="mission"
+                        rows="4"
+                        placeholder="Describe the department's mission, objectives, and core functions"
+                        class="w-full"
+                        [class.ng-invalid]="isFieldInvalid('mission')"
+                    >
+                    </textarea>
+                    <small
+                        *ngIf="isFieldInvalid('mission')"
+                        class="p-error block mt-1"
+                    >
+                        {{ getFieldError("mission") }}
+                    </small>
+                    <small class="text-muted block mt-1">
+                        {{
+                            departmentForm.get("mission")?.value?.length || 0
+                        }}/1000 characters
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex flex-wrap gap-2 mt-4">
+            <p-button
+                type="submit"
+                label="Create Department"
+                icon="pi pi-plus"
+                class="p-button-success"
+                [loading]="isSubmitting"
+                [disabled]="departmentForm.invalid || isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Reset Form"
+                icon="pi pi-refresh"
+                class="p-button-secondary"
+                (onClick)="onReset()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-outlined"
+                (onClick)="onCancel()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+        </div>
+    </form>
+</p-card>

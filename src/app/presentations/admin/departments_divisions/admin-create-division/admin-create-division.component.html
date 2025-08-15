@@ -1,0 +1,144 @@
+<div class="create-division-dialog">
+    <!-- Dialog Header -->
+    <div class="dialog-header">
+        <h3>
+            Create New Division
+            <span *ngIf="selectedDepartment" class="department-context">
+                in {{ selectedDepartment.name }}
+            </span>
+        </h3>
+    </div>
+
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Form Content -->
+    <form
+        [formGroup]="divisionForm"
+        (ngSubmit)="onSubmit()"
+        class="division-form"
+    >
+        <!-- Division Name -->
+        <div class="form-group">
+            <label for="name" class="required-field">Division Name *</label>
+            <input
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name"
+                placeholder="Enter division name"
+                maxlength="100"
+                [class.p-invalid]="isFieldInvalid('name')"
+                class="w-full"
+            />
+
+            <small class="field-error" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError("name") }}
+            </small>
+
+            <small class="field-help">
+                Division name should be descriptive and unique within the
+                department
+            </small>
+        </div>
+
+        <!-- Abbreviation -->
+        <div class="form-group">
+            <label for="abbreviation" class="required-field"
+                >Abbreviation *</label
+            >
+            <input
+                id="abbreviation"
+                type="text"
+                pInputText
+                formControlName="abbreviation"
+                placeholder="Enter abbreviation (e.g., FIN, HR, IT)"
+                maxlength="10"
+                [class.p-invalid]="isFieldInvalid('abbreviation')"
+                class="w-full"
+                style="text-transform: uppercase"
+            />
+
+            <small class="field-error" *ngIf="isFieldInvalid('abbreviation')">
+                {{ getFieldError("abbreviation") }}
+            </small>
+
+            <small class="field-help">
+                Short form used for quick identification (2-10 characters)
+            </small>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description" class="required-field"
+                >Description *</label
+            >
+            <textarea
+                id="description"
+                pInputTextarea
+                formControlName="description"
+                placeholder="Enter detailed description of the division's purpose and responsibilities"
+                rows="4"
+                maxlength="500"
+                [class.p-invalid]="isFieldInvalid('description')"
+                class="w-full"
+                [autoResize]="true"
+            ></textarea>
+
+            <small class="field-error" *ngIf="isFieldInvalid('description')">
+                {{ getFieldError("description") }}
+            </small>
+
+            <div class="character-count">
+                <small>
+                    {{
+                        divisionForm.get("description")?.value?.length || 0
+                    }}/500 characters
+                </small>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <div class="action-buttons">
+                <p-button
+                    type="button"
+                    label="Cancel"
+                    icon="pi pi-times"
+                    severity="secondary"
+                    (click)="onCancel()"
+                    [disabled]="isSubmitting"
+                >
+                </p-button>
+
+                <p-button
+                    type="button"
+                    label="Reset"
+                    icon="pi pi-refresh"
+                    severity="help"
+                    (click)="onReset()"
+                    [disabled]="isSubmitting"
+                >
+                </p-button>
+
+                <p-button
+                    type="submit"
+                    label="Create Division"
+                    icon="pi pi-check"
+                    severity="success"
+                    [loading]="isSubmitting"
+                    [disabled]="divisionForm.invalid || isSubmitting"
+                >
+                </p-button>
+            </div>
+        </div>
+
+        <!-- Form Status Info -->
+        <div class="form-status" *ngIf="divisionForm.dirty">
+            <small class="status-text">
+                <i class="pi pi-info-circle"></i>
+                Form has unsaved changes
+            </small>
+        </div>
+    </form>
+</div>

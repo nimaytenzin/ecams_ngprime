@@ -92,11 +92,41 @@ export class LoginComponent {
 
     private handleLoginSuccess(res: any, loginData: any): void {
         this.authService.SetAuthToken(res.token);
+
+        // Decode and log the JWT token
+        if (res.token) {
+            try {
+                const tokenPayload = this.decodeJWT(res.token);
+                console.log('Decoded JWT Token:', tokenPayload);
+
+                sessionStorage.setItem('userId', tokenPayload.id);
+            } catch (error) {
+                console.error('Error decoding JWT token:', error);
+            }
+        }
+
+        // Store userId in sessionStorage (fallback from response)
+        if (res.user && res.user.id) {
+            sessionStorage.setItem('userId', res.user.id);
+            console.log('UserId stored from response:', res.user.id);
+        }
+
         this.saveCredentialsIfRememberMe(loginData);
         setTimeout(() => {
             this.showLoading = false;
             this.determineNextRoute();
         }, 2000);
+    }
+
+    private decodeJWT(token: string): any {
+        try {
+            const payload = token.split('.')[1];
+            const decodedPayload = atob(payload);
+            return JSON.parse(decodedPayload);
+        } catch (error) {
+            console.error('Failed to decode JWT token:', error);
+            return null;
+        }
     }
 
     private saveCredentialsIfRememberMe(loginData: any): void {

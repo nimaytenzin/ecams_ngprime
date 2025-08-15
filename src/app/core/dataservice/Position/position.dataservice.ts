@@ -20,4 +20,18 @@ export class PositionDataService {
     GetAllPositions(): Observable<PositionDTO[]> {
         return this.http.get<PositionDTO[]>(`${this.apiUrl}/position`);
     }
+
+    CreatePositionLevel(data: PositionDTO): Observable<PositionDTO> {
+        return this.http.post<PositionDTO>(`${this.apiUrl}/position`, data);
+    }
+
+    UpdatePositionLevel(
+        positionId: number,
+        data: Partial<PositionDTO>
+    ): Observable<string> {
+        return this.http.put<string>(
+            `${this.apiUrl}/position/update/${positionId}`,
+            data
+        );
+    }
 }

@@ -1,0 +1,91 @@
+<p-toast />
+
+<div class="forward-letter-modal">
+    <div class="modal-header">
+        <h3>Forward Letter</h3>
+        <p class="text-sm text-gray-600">
+            Select a staff member to forward this letter to
+        </p>
+    </div>
+
+    <div class="modal-content">
+        <div class="form-field">
+            <label for="departmentId">Department</label>
+            <p-dropdown
+                [(ngModel)]="selectedDepartment"
+                [options]="departments"
+                optionLabel="name"
+                placeholder="Select Department"
+                appendTo="body"
+                styleClass="w-full"
+                (onChange)="getDivisionsByDepartment()"
+            ></p-dropdown>
+        </div>
+
+        <div class="form-field">
+            <label for="divisionId">Division</label>
+            <p-dropdown
+                [(ngModel)]="selectedDivision"
+                [options]="divisions"
+                optionLabel="name"
+                placeholder="Select Division"
+                appendTo="body"
+                styleClass="w-full"
+                (onChange)="getStaffsByDivision()"
+                [disabled]="!selectedDepartment"
+            ></p-dropdown>
+        </div>
+
+        <div class="form-field">
+            <label for="toId">Staff Member</label>
+            <p-dropdown
+                [(ngModel)]="selectedStaff"
+                [options]="staffs"
+                optionLabel="name"
+                appendTo="body"
+                styleClass="w-full"
+                placeholder="Select Staff Member"
+                [disabled]="!selectedDivision"
+            >
+                <ng-template let-staff pTemplate="item">
+                    <div class="staff-item">
+                        <span class="staff-name">{{ staff.name }}</span>
+                        <small class="staff-designation">{{
+                            staff.designation?.name
+                        }}</small>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+
+        <div class="form-field">
+            <label for="remarks">Remarks</label>
+            <textarea
+                pInputTextarea
+                rows="4"
+                [(ngModel)]="remarks"
+                placeholder="Enter remarks for forwarding (optional)..."
+                inputId="remarks"
+                class="w-full"
+            ></textarea>
+        </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="modal-footer">
+        <p-button
+            label="Cancel"
+            severity="secondary"
+            text="true"
+            (click)="onCancel()"
+        >
+        </p-button>
+        <p-button
+            label="Forward Letter"
+            (click)="forwardLetter()"
+            [disabled]="!selectedStaff"
+        >
+        </p-button>
+    </div>
+</div>

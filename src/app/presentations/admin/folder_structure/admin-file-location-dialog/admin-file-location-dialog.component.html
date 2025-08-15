@@ -1,0 +1,138 @@
+<div class="file-location-dialog">
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Form Content -->
+    <form
+        [formGroup]="fileLocationForm"
+        (ngSubmit)="onSubmit()"
+        class="file-location-form"
+    >
+        <!-- Category Selection (if not pre-selected) -->
+        <div class="field" *ngIf="!selectedCategory">
+            <label for="categoryId" class="required-field">Category</label>
+            <p-dropdown
+                id="categoryId"
+                formControlName="categoryId"
+                [options]="categories"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select a category"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                styleClass="w-full"
+                [class.ng-invalid]="isFieldInvalid('categoryId')"
+            >
+                <ng-template pTemplate="selectedItem" let-selectedCategory>
+                    <div class="category-item" *ngIf="selectedCategory">
+                        <span class="category-name">{{
+                            selectedCategory.name
+                        }}</span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="item" let-category>
+                    <div class="category-option">
+                        <div class="category-name">{{ category.name }}</div>
+                        <small
+                            class="category-details"
+                            *ngIf="category.filelocations?.length"
+                        >
+                            {{ category.filelocations.length }} file location(s)
+                        </small>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+
+            <small class="p-error" *ngIf="isFieldInvalid('categoryId')">
+                {{ getFieldError("categoryId") }}
+            </small>
+        </div>
+
+        <!-- Selected Category Display (when pre-selected) -->
+        <div class="field category-display" *ngIf="selectedCategory">
+            <label>Category</label>
+            <div class="selected-category-card">
+                <div class="category-info">
+                    <h4>{{ selectedCategory.name }}</h4>
+                    <p
+                        class="category-desc"
+                        *ngIf="selectedCategory.filelocations?.length"
+                    >
+                        Currently has
+                        {{ selectedCategory.filelocations.length }} file
+                        location(s)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Location Name -->
+        <div class="field">
+            <label for="name" class="required-field">File Location Name</label>
+            <input
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name"
+                placeholder="Enter file location name"
+                maxlength="100"
+                [class.ng-invalid]="isFieldInvalid('name')"
+                class="w-full"
+            />
+
+            <small class="p-error" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError("name") }}
+            </small>
+
+            <small class="field-help">
+                File location name should be descriptive and unique within the
+                category
+            </small>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <p-button
+                type="button"
+                label="Cancel"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="onCancel()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="button"
+                label="Reset"
+                icon="pi pi-refresh"
+                severity="help"
+                (click)="onReset()"
+                [disabled]="isSubmitting"
+            >
+            </p-button>
+
+            <p-button
+                type="submit"
+                [label]="
+                    isEditMode ? 'Update File Location' : 'Create File Location'
+                "
+                [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+                severity="success"
+                [loading]="isSubmitting"
+                [disabled]="fileLocationForm.invalid || isSubmitting"
+            >
+            </p-button>
+        </div>
+
+        <!-- Form Status Info -->
+        <div class="form-status" *ngIf="fileLocationForm.dirty">
+            <small class="status-text">
+                <i class="pi pi-info-circle"></i>
+                Form has unsaved changes
+            </small>
+        </div>
+    </form>
+</div>

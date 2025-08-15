@@ -22,15 +22,15 @@ import { USERROLESENUM } from './core/constants/enums';
                     component: AdminLayoutComponent,
                     canActivate: [RoleGuard],
                     data: {
-                        roles: [USERROLESENUM.admin, USERROLESENUM.staff],
+                        roles: [USERROLESENUM.admin],
                     },
                     children: [
                         {
                             path: '',
                             loadChildren: () =>
                                 import(
-                                    './presentations/admin/dashboard/admin-dashboard-routing.module'
-                                ).then((m) => m.AdminDashboardRoutingModule),
+                                    './presentations/admin/admin.module'
+                                ).then((m) => m.AdminModule),
                         },
                     ],
                 },
