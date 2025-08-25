@@ -56,6 +56,14 @@ import { USERROLESENUM } from './core/constants/enums';
                                     './presentations/staff/letters/staff-letters.routing.module'
                                 ).then((m) => m.StaffLettersRoutingModule),
                         },
+
+                        {
+                            path: 'archive',
+                            loadChildren: () =>
+                                import(
+                                    './presentations/staff/archive/staff-archive.routing.module'
+                                ).then((m) => m.StaffArchiveRoutingModule),
+                        },
                         {
                             path: 'search',
                             loadChildren: () =>

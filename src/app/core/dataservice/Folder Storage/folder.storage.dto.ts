@@ -2,6 +2,7 @@ export interface FilelocationCategoryDTO {
     id: number;
 
     name: string;
+    departmentId: number;
     filelocations: FileLocationDTO[];
 }
 
@@ -15,6 +16,7 @@ export interface FileLocationDTO {
 }
 
 export interface CreateFileLocationCategoryDTO {
+    departmentId: number;
     name: string;
 }
 export interface CreateFileLocationDTO {

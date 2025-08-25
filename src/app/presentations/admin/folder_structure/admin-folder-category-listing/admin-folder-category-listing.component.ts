@@ -8,6 +8,8 @@ import {
 } from 'src/app/core/dataservice/Folder Storage/folder.storage.dto';
 import { AdminFileLocationCategoryDialogComponent } from '../admin-file-location-category-dialog/admin-file-location-category-dialog.component';
 import { AdminFileLocationDialogComponent } from '../admin-file-location-dialog/admin-file-location-dialog.component';
+import { AuthenticatedUserDTO } from 'src/app/core/dataservice/User/dto/auth.dto';
+import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 
 @Component({
     selector: 'app-admin-folder-category-listing',
@@ -18,32 +20,39 @@ import { AdminFileLocationDialogComponent } from '../admin-file-location-dialog/
 export class AdminFolderCategoryListingComponent implements OnInit {
     categories: FilelocationCategoryDTO[] = [];
     loading = false;
+    authenticatedUser: AuthenticatedUserDTO;
 
     constructor(
         private folderStorageService: FolderStorageDataService,
         private messageService: MessageService,
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private authService: AuthService
     ) {}
 
     ngOnInit() {
         this.loadCategories();
+        this.authenticatedUser = this.authService.GetAuthenticatedUser();
     }
 
     loadCategories() {
         this.loading = true;
-        this.folderStorageService.GetAllFileLocationCategories().subscribe({
-            next: (categories) => {
-                this.categories = categories.sort((a, b) =>
-                    a.name.localeCompare(b.name)
-                );
-                this.loading = false;
-            },
-            error: (error) => {
-                console.error('Error loading categories:', error);
-                this.showError('Failed to load file location categories');
-                this.loading = false;
-            },
-        });
+        this.folderStorageService
+            .GetAllFileLocationCategoriesByDepartment(
+                this.authenticatedUser.department.id
+            )
+            .subscribe({
+                next: (categories) => {
+                    this.categories = categories.sort((a, b) =>
+                        a.name.localeCompare(b.name)
+                    );
+                    this.loading = false;
+                },
+                error: (error) => {
+                    console.error('Error loading categories:', error);
+                    this.showError('Failed to load file location categories');
+                    this.loading = false;
+                },
+            });
     }
 
     refresh() {

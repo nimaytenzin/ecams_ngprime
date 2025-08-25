@@ -38,6 +38,8 @@ import { StaffForwardLetterModalComponent } from './components/staff-forward-let
 import { StaffAttachmentModalComponent } from './components/staff-attachment-modal/staff-attachment-modal.component';
 import { StaffActionModalComponent } from './components/staff-action-modal/staff-action-modal.component';
 import { StaffCloseLetterModalComponent } from './components/staff-close-letter-modal/staff-close-letter-modal.component';
+import { AuthenticatedUserDTO } from 'src/app/core/dataservice/User/dto/auth.dto';
+import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 
 // Step enums
 enum UploadStep {
@@ -102,6 +104,7 @@ export class StaffUploadLetterComponent implements OnInit {
     loadingFileLocations = false;
     uploading = false;
 
+    authenticatedUser: AuthenticatedUserDTO;
     constructor(
         private fb: FormBuilder,
         private messageService: MessageService,
@@ -111,9 +114,11 @@ export class StaffUploadLetterComponent implements OnInit {
         private dzongkhagDataService: DzongkhagDataService,
         private departmentDataService: DepartmentDataService,
         private divisionDataService: DivisionDataService,
-        private folderStorageDataService: FolderStorageDataService
+        private folderStorageDataService: FolderStorageDataService,
+        private authService: AuthService
     ) {
         this.initializeForms();
+        this.authenticatedUser = this.authService.GetAuthenticatedUser();
     }
 
     ngOnInit(): void {
@@ -172,12 +177,16 @@ export class StaffUploadLetterComponent implements OnInit {
         });
 
         // Load File Location Categories
-        this.folderStorageDataService.GetAllFileLocationCategories().subscribe({
-            next: (res) => {
-                this.fileLocationCategories = res;
-            },
-            error: () => this.showNetworkError(),
-        });
+        this.folderStorageDataService
+            .GetAllFileLocationCategoriesByDepartment(
+                this.authenticatedUser.department.id
+            )
+            .subscribe({
+                next: (res) => {
+                    this.fileLocationCategories = res;
+                },
+                error: () => this.showNetworkError(),
+            });
     }
 
     // Step 1: Mode Selection
@@ -254,14 +263,18 @@ export class StaffUploadLetterComponent implements OnInit {
                 c.id === this.storageForm.get('archivalFolderCategoryId')?.value
         );
 
-        if (category?.filelocations) {
-            this.fileLocations = category.filelocations;
-            if (this.fileLocations.length > 0) {
-                this.storageForm.patchValue({
-                    archivalFolder: this.fileLocations[0],
-                });
-            }
-        }
+        this.folderStorageDataService
+            .GetAllFileLocationsByCategory(category.id)
+            .subscribe({
+                next: (res) => {
+                    this.fileLocations = res;
+                    if (this.fileLocations.length > 0) {
+                        this.storageForm.patchValue({
+                            archivalFolder: this.fileLocations[0],
+                        });
+                    }
+                },
+            });
     }
 
     proceedToFileSelection(): void {

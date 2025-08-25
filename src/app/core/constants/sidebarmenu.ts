@@ -17,6 +17,18 @@ export const STAFF_SIDEBARITEMS = [
                 roles: [USERROLESENUM.staff],
             },
             {
+                label: 'Confidential Letters',
+                icon: 'pi pi-fw pi-lock',
+                routerLink: ['/staff/letter/confidential'],
+                roles: [USERROLESENUM.staff],
+            },
+            {
+                label: 'Archive',
+                icon: 'pi pi-fw pi-folder',
+                routerLink: ['/staff/archive'],
+                roles: [USERROLESENUM.staff],
+            },
+            {
                 label: 'Upload Letter',
                 icon: 'pi pi-fw pi-upload',
                 routerLink: ['/staff/letter/upload'],
@@ -51,6 +63,18 @@ export const ADMIN_SIDEBARITEMS = [
                 label: 'All Letters',
                 icon: 'pi pi-fw pi-file',
                 routerLink: ['/staff/letter'],
+                roles: [USERROLESENUM.staff, USERROLESENUM.admin],
+            },
+            {
+                label: 'Confidential Letters',
+                icon: 'pi pi-fw pi-lock',
+                routerLink: ['/staff/letter/confidential'],
+                roles: [USERROLESENUM.staff, USERROLESENUM.admin],
+            },
+            {
+                label: 'Archive',
+                icon: 'pi pi-fw pi-folder',
+                routerLink: ['/staff/archive'],
                 roles: [USERROLESENUM.staff, USERROLESENUM.admin],
             },
             {

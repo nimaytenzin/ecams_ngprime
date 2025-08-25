@@ -14,6 +14,7 @@ import {
     FilelocationCategoryDTO,
     CreateFileLocationCategoryDTO,
 } from 'src/app/core/dataservice/Folder Storage/folder.storage.dto';
+import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 
 @Component({
     selector: 'app-admin-file-location-category-dialog',
@@ -32,7 +33,8 @@ export class AdminFileLocationCategoryDialogComponent implements OnInit {
         private folderStorageService: FolderStorageDataService,
         private messageService: MessageService,
         private ref: DynamicDialogRef,
-        private config: DynamicDialogConfig
+        private config: DynamicDialogConfig,
+        private authService: AuthService
     ) {
         this.category = this.config.data?.category || null;
         this.isEditMode = !!this.category;
@@ -73,6 +75,9 @@ export class AdminFileLocationCategoryDialogComponent implements OnInit {
             // Create new category
             const createData: CreateFileLocationCategoryDTO = {
                 name: formValue.name.trim(),
+                departmentId: Number(
+                    this.authService.GetAuthenticatedUser().department.id
+                ),
             };
 
             this.folderStorageService

@@ -26,9 +26,11 @@ export class FolderStorageDataService {
     //     )
     // }
 
-    GetAllFileLocationCategories(): Observable<FilelocationCategoryDTO[]> {
+    GetAllFileLocationCategoriesByDepartment(
+        departmentId
+    ): Observable<FilelocationCategoryDTO[]> {
         return this.http.get<FilelocationCategoryDTO[]>(
-            `${this.apiUrl}/filelocation-category`
+            `${this.apiUrl}/filelocation-category/department/${departmentId}`
         );
     }
 

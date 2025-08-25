@@ -171,4 +171,14 @@ export class LetterDataService {
             `${this.apiUrl}/attachments/letterId/${letterId}`
         );
     }
+
+    GetLettersForArchive(
+        year: number,
+        divisionId: number,
+        fileLocationId: number
+    ): Observable<LetterDTO[]> {
+        return this.http.get<LetterDTO[]>(
+            `${this.apiUrl}/letter/archive/${year}/${divisionId}/${fileLocationId}`
+        );
+    }
 }

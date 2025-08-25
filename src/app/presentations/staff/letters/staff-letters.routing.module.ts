@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StaffViewLetterComponent } from './view-letter/staff-view-letter/staff-view-letter.component';
 import { StaffListLettersComponent } from './list-letters/staff-list-letters/staff-list-letters.component';
 import { StaffUploadLetterComponent } from './staff-upload-letter/staff-upload-letter.component';
+import { StaffListConfidentialLettersComponent } from '../confidential-letters/staff-list-confidential-letters/staff-list-confidential-letters.component';
 
 const routes: Routes = [
     {
@@ -16,6 +17,12 @@ const routes: Routes = [
     {
         path: 'upload',
         component: StaffUploadLetterComponent,
+    },
+
+    // CONFIDENTIAL LETTERS
+    {
+        path: 'confidential',
+        component: StaffListConfidentialLettersComponent,
     },
 ];
 
