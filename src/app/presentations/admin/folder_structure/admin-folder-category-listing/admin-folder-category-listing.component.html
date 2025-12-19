@@ -43,153 +43,129 @@
 
     <!-- Categories with nested File Locations -->
     <div *ngIf="!loading && categories.length > 0" class="categories-container">
-        <div *ngFor="let category of categories" class="category-card mb-4">
-            <p-card>
-                <ng-template pTemplate="header">
-                    <div
-                        class="flex align-items-center justify-content-between p-3 pb-0"
-                    >
-                        <div class="flex align-items-center gap-3">
-                            <i class="pi pi-folder text-primary text-2xl"></i>
-                            <div>
-                                <h3 class="category-name m-0">
-                                    {{ category.name }}
-                                </h3>
-                                <p
-                                    class="category-meta text-sm text-color-secondary m-0 mt-1"
-                                >
-                                    {{
-                                        getFileLocationsForCategory(category)
-                                            .length
-                                    }}
-                                    file locations
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex align-items-center gap-2">
-                            <p-button
-                                icon="pi pi-plus"
-                                label="Add Location"
-                                size="small"
-                                severity="success"
-                                (click)="addFileLocation(category)"
-                            >
-                            </p-button>
+        <div *ngFor="let category of categories" class="category-section mb-4">
+            <div class="category-header">
+                <div class="category-header-content p-3">
+                    <div class="flex align-items-center gap-3 mb-2">
+                        <i class="pi pi-folder text-primary text-2xl"></i>
+                        <div class="flex align-items-center gap-2 flex-1">
+                            <h3 class="category-name m-0">
+                                {{ category.name }}
+                            </h3>
                             <p-button
                                 icon="pi pi-pencil"
                                 size="small"
                                 [text]="true"
-                                pTooltip="Edit Category"
+                                severity="secondary"
+                                pTooltip="Edit Category Name"
                                 (click)="editCategory(category)"
+                                class="edit-category-btn"
                             >
                             </p-button>
                         </div>
                     </div>
-                </ng-template>
-
-                <ng-template pTemplate="content">
-                    <!-- File Locations Grid -->
-                    <div class="file-locations-grid">
-                        <div
-                            *ngIf="
-                                getFileLocationsForCategory(category).length ===
-                                0
-                            "
-                            class="empty-locations text-center p-4"
+                    <div class="flex align-items-center justify-content-between">
+                        <p
+                            class="category-meta text-sm text-color-secondary m-0"
                         >
-                            <i
-                                class="pi pi-map-marker text-4xl text-color-secondary mb-2"
-                            ></i>
-                            <p class="text-color-secondary m-0">
-                                No file locations in this category
-                            </p>
-                            <p-button
-                                label="Add First Location"
-                                icon="pi pi-plus"
-                                size="small"
-                                class="mt-2"
-                                (click)="addFileLocation(category)"
-                            >
-                            </p-button>
-                        </div>
-
-                        <div
-                            *ngIf="
-                                getFileLocationsForCategory(category).length > 0
-                            "
-                            class="grid"
+                            {{
+                                getFileLocationsForCategory(category)
+                                    .length
+                            }}
+                            file locations
+                        </p>
+                        <p-button
+                            icon="pi pi-plus"
+                            label="Add Location"
+                            size="small"
+                            severity="success"
+                            (click)="addFileLocation(category)"
                         >
-                            <div
-                                *ngFor="
-                                    let location of getFileLocationsForCategory(
-                                        category
-                                    )
-                                "
-                                class="col-12 md:col-6 lg:col-4"
-                            >
-                                <div
-                                    class="file-location-item p-3 border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
-                                >
-                                    <div
-                                        class="flex align-items-start justify-content-between"
-                                    >
-                                        <div class="flex-1">
-                                            <div
-                                                class="flex align-items-center gap-2 mb-2"
-                                            >
-                                                <i
-                                                    class="pi pi-map-marker text-primary"
-                                                ></i>
-                                                <span class="font-semibold">{{
-                                                    location.name
-                                                }}</span>
-                                            </div>
+                        </p-button>
+                    </div>
+                </div>
+            </div>
 
-                                            <div
-                                                class="flex align-items-center gap-2 mb-2"
-                                                *ngIf="location.description"
-                                            >
-                                                <span
-                                                    class="text-sm text-color-secondary"
-                                                    >{{
-                                                        location.description
-                                                    }}</span
-                                                >
-                                            </div>
+            <div class="category-content">
+                <!-- Loading State -->
+                <div
+                    *ngIf="loadingLocations[category.id]"
+                    class="loading-locations text-center p-4"
+                >
+                    <i
+                        class="pi pi-spin pi-spinner text-primary text-2xl mb-2"
+                    ></i>
+                    <p class="text-color-secondary m-0">
+                        Loading file locations...
+                    </p>
+                </div>
 
-                                            <div
-                                                class="flex align-items-center gap-2"
-                                            >
-                                                <p-tag
-                                                    value="Active"
-                                                    severity="success"
-                                                    [rounded]="true"
-                                                >
-                                                </p-tag>
-                                            </div>
-                                        </div>
+                <!-- Empty State -->
+                <div
+                    *ngIf="
+                        !loadingLocations[category.id] &&
+                        getFileLocationsForCategory(category).length === 0
+                    "
+                    class="empty-locations text-center p-4"
+                >
+                    <i
+                        class="pi pi-folder-open text-4xl text-color-secondary mb-2"
+                    ></i>
+                    <p class="text-color-secondary m-0 mb-2">
+                        No file locations in this category
+                    </p>
+                    <p-button
+                        label="Add First Location"
+                        icon="pi pi-plus"
+                        size="small"
+                        (click)="addFileLocation(category)"
+                    >
+                    </p-button>
+                </div>
 
-                                        <div
-                                            class="flex align-items-center gap-1"
-                                        >
-                                            <p-button
-                                                icon="pi pi-pencil"
-                                                size="small"
-                                                [text]="true"
-                                                pTooltip="Edit File Location"
-                                                (click)="
-                                                    editFileLocation(location)
-                                                "
-                                            >
-                                            </p-button>
-                                        </div>
+                <!-- File Locations List -->
+                <div
+                    *ngIf="
+                        !loadingLocations[category.id] &&
+                        getFileLocationsForCategory(category).length > 0
+                    "
+                    class="file-locations-list"
+                >
+                    <div
+                        *ngFor="
+                            let location of getFileLocationsForCategory(
+                                category
+                            )
+                        "
+                        class="file-location-row"
+                    >
+                        <div class="file-location-item">
+                            <div class="flex align-items-center gap-3">
+                                <i
+                                    class="pi pi-folder text-primary text-xl"
+                                ></i>
+                                <div class="flex align-items-center gap-2 flex-1">
+                                    <div class="font-semibold text-lg">
+                                        {{ location.name }}
                                     </div>
+                                    <p-button
+                                        icon="pi pi-pencil"
+                                        size="small"
+                                        [text]="true"
+                                        severity="secondary"
+                                        pTooltip="Edit File Location Name"
+                                        (click)="
+                                            editFileLocation(location)
+                                        "
+                                        class="edit-location-btn"
+                                    >
+                                    </p-button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </ng-template>
-            </p-card>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -213,6 +189,6 @@
         </div>
     </div>
 </div>
-
 <!-- Toast for notifications -->
 <p-toast></p-toast>
+

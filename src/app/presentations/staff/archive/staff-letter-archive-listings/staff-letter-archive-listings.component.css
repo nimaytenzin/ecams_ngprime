@@ -22,6 +22,77 @@
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+.letter-list,
+.explorer-list {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.letter-row,
+.explorer-row {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--surface-200);
+}
+
+.letter-row {
+    grid-template-columns: 2fr 1.2fr 1fr 1.4fr 0.8fr;
+}
+
+.explorer-row {
+    grid-template-columns: 1fr 1.2fr;
+}
+
+.letter-row.header,
+.explorer-row.header {
+    background: var(--surface-100);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+}
+
+.letter-row:last-child,
+.explorer-row:last-child {
+    border-bottom: none;
+}
+
+.letter-row:hover:not(.header),
+.explorer-row:hover:not(.header) {
+    background: var(--surface-50);
+    cursor: pointer;
+}
+
+.col {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.col-actions {
+    justify-content: flex-end;
+}
+
+.text-overflow-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .letter-row {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+    }
+
+    .col {
+        width: 100%;
+    }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;

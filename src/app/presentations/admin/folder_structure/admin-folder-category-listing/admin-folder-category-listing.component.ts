@@ -20,6 +20,8 @@ import { AuthService } from 'src/app/core/dataservice/User/auth.service';
 export class AdminFolderCategoryListingComponent implements OnInit {
     categories: FilelocationCategoryDTO[] = [];
     loading = false;
+    loadingLocations: { [categoryId: number]: boolean } = {};
+    expandedCategories: { [categoryId: number]: boolean } = {};
     authenticatedUser: AuthenticatedUserDTO;
 
     constructor(
@@ -30,11 +32,16 @@ export class AdminFolderCategoryListingComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.loadCategories();
         this.authenticatedUser = this.authService.GetAuthenticatedUser();
+        this.loadCategories();
     }
 
     loadCategories() {
+        if (!this.authenticatedUser?.department?.id) {
+            console.error('Authenticated user or department not available');
+            this.showError('User authentication information is not available');
+            return;
+        }
         this.loading = true;
         this.folderStorageService
             .GetAllFileLocationCategoriesByDepartment(
@@ -45,6 +52,8 @@ export class AdminFolderCategoryListingComponent implements OnInit {
                     this.categories = categories.sort((a, b) =>
                         a.name.localeCompare(b.name)
                     );
+                    // Load file locations for each category
+                    this.loadFileLocationsForAllCategories();
                     this.loading = false;
                 },
                 error: (error) => {
@@ -53,6 +62,56 @@ export class AdminFolderCategoryListingComponent implements OnInit {
                     this.loading = false;
                 },
             });
+    }
+
+    loadFileLocationsForAllCategories() {
+        this.categories.forEach((category) => {
+            this.loadFileLocationsForCategory(category);
+        });
+    }
+
+    loadFileLocationsForCategory(category: FilelocationCategoryDTO) {
+        this.loadingLocations[category.id] = true;
+        this.folderStorageService
+            .GetAllFileLocationsByCategory(category.id)
+            .subscribe({
+                next: (locations) => {
+                    // Update the category with loaded file locations
+                    const categoryIndex = this.categories.findIndex(
+                        (c) => c.id === category.id
+                    );
+                    if (categoryIndex !== -1) {
+                        this.categories[categoryIndex].filelocations =
+                            locations.sort((a, b) =>
+                                a.name.localeCompare(b.name)
+                            );
+                    }
+                    this.loadingLocations[category.id] = false;
+                },
+                error: (error) => {
+                    console.error(
+                        `Error loading file locations for category ${category.id}:`,
+                        error
+                    );
+                    this.loadingLocations[category.id] = false;
+                    // Initialize empty array if loading fails
+                    const categoryIndex = this.categories.findIndex(
+                        (c) => c.id === category.id
+                    );
+                    if (categoryIndex !== -1) {
+                        this.categories[categoryIndex].filelocations = [];
+                    }
+                },
+            });
+    }
+
+    toggleCategory(categoryId: number) {
+        this.expandedCategories[categoryId] =
+            !this.expandedCategories[categoryId];
+    }
+
+    isCategoryExpanded(categoryId: number): boolean {
+        return this.expandedCategories[categoryId] !== false; // Default to expanded
     }
 
     refresh() {
@@ -134,7 +193,12 @@ export class AdminFolderCategoryListingComponent implements OnInit {
                 this.showSuccess(
                     `File Location "${result.fileLocation.name}" ${result.action}d successfully!`
                 );
-                this.loadCategories(); // Refresh to update file location counts
+                // Reload file locations for the affected category
+                if (category) {
+                    this.loadFileLocationsForCategory(category);
+                } else {
+                    this.loadCategories(); // Refresh all if no specific category
+                }
             }
         });
     }
@@ -159,7 +223,15 @@ export class AdminFolderCategoryListingComponent implements OnInit {
                 this.showSuccess(
                     `File Location "${result.fileLocation.name}" ${result.action}d successfully!`
                 );
-                this.loadCategories(); // Refresh to update file location counts
+                // Find and reload the category for this file location
+                const category = this.categories.find(
+                    (c) => c.id === fileLocation.categoryId
+                );
+                if (category) {
+                    this.loadFileLocationsForCategory(category);
+                } else {
+                    this.loadCategories(); // Refresh all if category not found
+                }
             }
         });
     }

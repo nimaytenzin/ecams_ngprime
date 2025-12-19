@@ -43,7 +43,7 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class StaffLetterArchiveListingsComponent implements OnInit {
     letters: any[] = [];
-    years: number[] = [2021, 2022, 2023, 2024, 2025];
+    years: number[] = [];
     fileLocationCategories: FilelocationCategoryDTO[] = [];
     selectedFileLocationCategory: FilelocationCategoryDTO | null = null;
 
@@ -66,18 +66,18 @@ export class StaffLetterArchiveListingsComponent implements OnInit {
 
     ngOnInit() {
         this.authenticatedUser = this.authService.GetAuthenticatedUser();
+        this.populateYears();
         this.loadInitialData();
     }
 
     private loadInitialData() {
-        // Load file locations
         this.folderStorageService
             .GetAllFileLocationCategoriesByDepartment(
                 this.authService.GetAuthenticatedUser().department.id
             )
             .subscribe((locations) => {
-                this.fileLocationCategories = locations;
-                console.log('file location categories', locations);
+                // keep categories alphabetical
+                this.fileLocationCategories = this.sortByName(locations);
             });
     }
 
@@ -89,18 +89,57 @@ export class StaffLetterArchiveListingsComponent implements OnInit {
     selectYear(year: number) {
         this.yearSelected = year;
     }
+
+    getYearDate(year: number): Date {
+        // Return January 1st of the year as a date
+        return new Date(year, 0, 1);
+    }
+
+    selectFileLocation(location: FileLocationDTO) {
+        this.selectedFileLocation = location;
+        this.loading = true;
+        // Load letters for the selected file location
+        if (this.yearSelected && location.id) {
+            const divisionId = this.authenticatedUser.division?.id || this.authenticatedUser.department.id;
+            this.letterService
+                .GetLettersForArchive(this.yearSelected, divisionId, location.id)
+                .subscribe({
+                    next: (letters) => {
+                        this.letters = letters;
+                        this.loading = false;
+                    },
+                    error: () => {
+                        this.loading = false;
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to load letters',
+                        });
+                    },
+                });
+        }
+    }
     loadLocationsByCategory(category: FilelocationCategoryDTO) {
-        this.selectedFileLocationCategory = category; // Add this line
+        this.selectedFileLocationCategory = category;
         this.folderStorageService
             .GetAllFileLocationsByCategory(category.id)
             .subscribe((locations) => {
-                this.fileLocations = locations;
-                console.log('file locations', locations);
+                // keep file locations alphabetical
+                this.fileLocations = this.sortByName(locations);
             });
     }
 
     viewDetails(id: number) {
-        this.router.navigate(['/staff/letters/view', id]);
+        this.router.navigate(['/staff/letter/view', id]);
+    }
+
+    goBackToFileLocations() {
+        this.selectedFileLocation = null;
+        this.letters = [];
+        // Reload file locations for the category
+        if (this.selectedFileLocationCategory) {
+            this.loadLocationsByCategory(this.selectedFileLocationCategory);
+        }
     }
 
     resetSelection() {
@@ -108,5 +147,25 @@ export class StaffLetterArchiveListingsComponent implements OnInit {
         this.selectedFileLocationCategory = null;
         this.selectedFileLocation = null;
         this.fileLocations = [];
+        this.letters = [];
+    }
+
+    get sortedLetters() {
+        return [...this.letters].sort((a, b) =>
+            (a.subject || '').localeCompare(b.subject || '')
+        );
+    }
+
+    private populateYears() {
+        const currentYear = new Date().getFullYear();
+        const startYear = 2020;
+        this.years = Array.from(
+            { length: currentYear - startYear + 1 },
+            (_, idx) => startYear + idx
+        ).reverse();
+    }
+
+    private sortByName<T extends { name: string }>(items: T[]): T[] {
+        return [...items].sort((a, b) => a.name.localeCompare(b.name));
     }
 }

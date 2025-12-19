@@ -178,7 +178,7 @@ export class LetterDataService {
         fileLocationId: number
     ): Observable<LetterDTO[]> {
         return this.http.get<LetterDTO[]>(
-            `${this.apiUrl}/letter/archive/${year}/${divisionId}/${fileLocationId}`
+            `${this.apiUrl}/letter/archiveLetter/${year}/${divisionId}/${fileLocationId}`
         );
     }
 }

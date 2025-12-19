@@ -22,14 +22,21 @@
   line-height: 1.4;
 }
 
-/* Category Card Styling */
-.category-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Category Section Styling */
+.category-section {
+  border: 1px solid var(--surface-200);
+  border-radius: 4px;
+  background: var(--surface-0);
 }
 
-.category-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+.category-header {
+  border-bottom: 1px solid var(--surface-200);
+  background: var(--surface-50);
+}
+
+.category-header-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .category-name {
@@ -42,47 +49,65 @@
   font-weight: 500;
 }
 
+.edit-category-btn,
+.edit-location-btn {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.edit-category-btn:hover,
+.edit-location-btn:hover {
+  opacity: 1;
+}
+
 /* File Location Items */
+.category-content {
+  padding: 1rem;
+}
+
+.file-locations-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-location-row {
+  width: 100%;
+  border-bottom: 1px solid var(--surface-200);
+}
+
+.file-location-row:last-child {
+  border-bottom: none;
+}
+
 .file-location-item {
-  background: var(--surface-ground);
-  transition: all 0.2s ease;
-  cursor: pointer;
+  padding: 0.75rem 0;
 }
 
-.file-location-item:hover {
-  background: var(--surface-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.file-location-item .flex {
+  align-items: center;
 }
 
-.file-locations-grid {
-  padding: 0 1rem 1rem 1rem;
+.loading-locations {
+  background: var(--surface-50);
+  border-radius: 8px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-locations {
   background: var(--surface-50);
   border: 2px dashed var(--surface-300);
-  border-radius: var(--border-radius);
-  margin: 1rem;
+  border-radius: 8px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Card Styling */
-::ng-deep .p-card {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--surface-border);
-  overflow: hidden;
-}
-
-::ng-deep .p-card .p-card-header {
-  padding: 0;
-  border-bottom: 1px solid var(--surface-border);
-  background: var(--surface-50);
-}
-
-::ng-deep .p-card .p-card-content {
-  padding: 0;
-}
 
 /* Empty State */
 .empty-state {
@@ -140,7 +165,11 @@
   }
   
   .file-location-item {
-    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+  }
+  
+  .category-content {
+    padding: 0.75rem;
   }
   
   /* Stack buttons vertically on mobile */
@@ -175,26 +204,6 @@
   }
 }
 
-/* Animation */
-.management-container {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.category-card {
-  animation: slideUp 0.4s ease-out;
-}
-
-.category-card:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.category-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.category-card:nth-child(4) {
-  animation-delay: 0.3s;
-}
 
 @keyframes fadeIn {
   from {
@@ -250,11 +259,6 @@
   gap: 1rem;
 }
 
-/* Hover effects */
-.file-location-item,
-.empty-locations {
-  transition: all 0.2s ease-in-out;
-}
 
 /* Success button styling */
 ::ng-deep .p-button.p-button-success {
