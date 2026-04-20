@@ -2,6 +2,7 @@ export enum USERROLESENUM {
     'staff' = 'staff',
     'admin' = 'admin',
     'dispatch' = 'dispatch',
+    'chief' = 'chief',
 }
 
 export enum STAFFSTATUSENUM {

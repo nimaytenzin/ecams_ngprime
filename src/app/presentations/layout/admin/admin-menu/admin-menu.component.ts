@@ -27,7 +27,7 @@ export class AdminMenuComponent implements OnInit {
             this.model = ADMIN_SIDEBARITEMS;
         }
 
-        if (userRole === 'staff' || userRole === 'dispatch') {
+        if (userRole === 'staff' || userRole === 'dispatch' || userRole === 'chief') {
             this.model = STAFF_SIDEBARITEMS;
         }
         // this.model = this.filterMenuItemsByRole(ADMINSIDEBARITEMS, userRole);
